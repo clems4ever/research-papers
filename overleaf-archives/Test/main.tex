@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{array}
+
+\title{Test}
+\author{Clément Michaud}
+\date{February 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+
+\newcommand{\tightcolon}{\mathrel{\mkern-3mu\text{:}\mkern-3mu}}
+
+\newcommand{\setupwithtypes}{%
+\mathcode`:="8000
+\begingroup
+  \lccode`\~=`\:
+  \lowercase{\endgroup\def~}{\tightcolon}
+}
+
+\newenvironment{withtypes}{\setupwithtypes}{\ignorespacesafterend}
+
+\def\tlambda
+
+\tlambda x:y.a
+
+\begin{withtypes}
+    \[
+        (x:A)=\begin{array}{ll}
+            x:A & y\\
+        \end{array}
+    \]
+\end{withtypes}
+
+\end{document}
