@@ -1,0 +1,30 @@
+% Define a new theorem style with extra space
+\newtheoremstyle{spaced}
+  {0pt}   % Space above (adjust to increase/decrease)
+  {0pt}   % Space below (adjust to increase/decrease)
+  {} % Body font (keep as default or change)
+  {}        % Indent amount
+  {\bfseries} % Theorem head font
+  {}       % Punctuation after theorem head
+  {1em}     % Space after theorem head
+  {}        % Theorem head spec
+
+\theoremstyle{spaced}
+
+\mdfdefinestyle{myenvs}{%
+  hidealllines=false,%
+  nobreak=true, % comment this to allow breaking
+}
+
+\newmdtheoremenv[style=myenvs]{theorem}{Theorem}[section] % Main counter
+\newmdtheoremenv[style=myenvs]{definition}[theorem]{Definition}
+\newmdtheoremenv[style=myenvs]{lemma}[theorem]{Lemma}
+\newmdtheoremenv[style=myenvs]{examples}[theorem]{Examples}
+\newmdtheoremenv[style=myenvs]{proposition}[theorem]{Proposition}
+\newmdtheoremenv[style=myenvs]{corollary}[theorem]{Corollary}
+
+
+\newenvironment{reusable}[2]{%
+        \restatable{#1}{#2}
+        \label{#2}}
+    {\endrestatable}

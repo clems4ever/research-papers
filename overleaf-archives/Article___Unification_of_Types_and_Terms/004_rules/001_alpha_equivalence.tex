@@ -1,0 +1,45 @@
+\alphaequivalence is an equivalence relation that makes two \lambdatauterms congruent modulo variable renaming in typed and untyped abstractions. This is an extension of the \alphaequivalence for pure \lambdacalc.
+
+\begin{reusable}{definition}{alphaEquivalenceDefinition}
+We define the \alphaequivalence relation $\alphaeq$ as follows:
+
+\begin{itemize}
+    \item \textbf{Reflexivity:} \( M \alphaeq M \).
+    \item \textbf{Symmetry:} \( M \alphaeq N \Longrightarrow N \alphaeq M \).
+    \item \textbf{Transitivity:} \( M \alphaeq N \land N \alphaeq P \Longrightarrow M \alphaeq P \).
+    \item \textbf{Var Renaming:} $y \not\in\text{FV}(M) \Longrightarrow \tabs x:N.\,M \alphaeq \tabs y:N.M[x:=y]$.
+    \item \textbf{Any Erasure:} $\forall X \in \mathbb{V},\quad \tabs {X}:{*}.M \alphaeq \uabs X.M$.
+    \item \textbf{Compatibility:} $\alphaeq$ is compatible.
+\end{itemize}
+\end{reusable}
+
+The three first rules are properties for making this relation an equivalence relation and the \textit{Var Renaming} rule is stating that two abstractions are equivalent modulo variable renaming and substitution in the body. The compatibility constraint ensures that the definition is inductive on sub-terms. The rule of \textit{Any Erasure} is a rule of comfort in order to save few characters and make things more readable. We chose to include this rule as part of $\alphaeq$ and treat it mathematically for completeness instead of creating an informal equivalence by simply saying that the terms are interchangeable.
+
+\begin{lemma}
+    If $M_1 \alphaeq M_2$ and $N_1 \alphaeq N_2$, then $(\app {M_1} {N_1}) \alphaeq (\app {M_2} {N_2})$.
+\end{lemma}
+
+\begin{proof}
+    $\alphaeq$ is compatible and transitive by definition, and therefore, \cref{lemmaTransitiveCompatibility} applies. We conclude that if $M_1 \alphaeq M_2$ and $N_1 \alphaeq N_2$, then $(\app {M_1} {N_1}) \alphaeq (\app {M_2} {N_2})$.
+\end{proof}
+
+\begin{reusable}{lemma}{lemmaTypedAbstractionStructuralCongruence}
+If $\lambda x \oftype M.N \alphaeq \lambda y \oftype M'.N'$ then $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{reusable}
+The proof is in \cref{proof:lemmaTypedAbstractionStructuralCongruence}.
+
+\begin{reusable}{lemma}{lemmaUntypedAbstractionStructuralCongruence}
+If $\lambda x.M \alphaeq \lambda y.M'$ then $M \alphaeq M'$.
+\end{reusable}
+Obviously, the proof for untyped abstraction is similar to the one for the typed abstraction.
+
+\begin{reusable}{lemma}{lemmaApplicationStructuralCongruence}
+If $MN \alphaeq M'N'$ then $M \alphaeq M'$ and $N \alphaeq N'$
+\end{reusable}
+The proof of this lemma is in \cref{proof:lemmaApplicationStructuralCongruence}.
+
+\begin{reusable}{lemma}{lemmaAlphaEqSubstitutionDoubleAlphaEq}
+If $M_1 \alphaeq N_1$ and $M_2 \alphaeq N_2$ then $M_1[x := N_1] \alphaeq M_2[x := N_2]$
+\end{reusable}
+
+This lemma is stated without proof.

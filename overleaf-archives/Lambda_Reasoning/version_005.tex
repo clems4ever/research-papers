@@ -1,0 +1,477 @@
+% Alpha equivalence
+\newcommand{\alphaequivalence}{$\alpha$-equivalence\xspace}
+\newcommand{\alphaequivalent}{$\alpha$-equivalent\xspace}
+\newcommand{\alphaeq}{\equiv_\alpha}
+\newcommand{\alphaconversion}{$\alpha$-conversion\xspace}
+
+% One-step Tau reduction
+\newcommand{\stotau}{\ \triangleright_{\tau}\ }
+\newcommand{\osteptaureduction}{one-step $\tau$-reduction\xspace}
+\newcommand{\osteptaureductions}{one-step $\tau$-reductions\xspace}
+\newcommand{\osteptaureducible}{one-step $\tau$-reducible\xspace}
+
+% Multi-step tau reduction
+\newcommand{\totau}{\to_{\tau}}
+\newcommand{\taureduction}{$\tau$-reduction\xspace}
+\newcommand{\tauconversion}{$\tau$-conversion\xspace}
+\newcommand{\taureductions}{$\tau$-reductions\xspace}
+\newcommand{\taureduce}{$\tau$-reduce\xspace}
+\newcommand{\taureduces}{$\tau$-reduces\xspace}
+\newcommand{\taureducible}{$\tau$-reducible\xspace}
+\newcommand{\msteptaureduction}{multi-step $\tau$-reduction\xspace}
+\newcommand{\msteptaureducible}{multi-step $\tau$-reducible\xspace}
+
+% Tau equivalence
+\newcommand{\tauequivalence}{$\tau$-equivalence\xspace}
+\newcommand{\tauequivalent}{$\tau$-equivalent\xspace}
+\newcommand{\taueq}{=_{\tau}}
+
+\newcommand{\betareduction}{$\beta$-reduction\xspace}
+\newcommand{\betareduce}{$\beta$-reduces\xspace}
+
+\newcommand{\quadvdash}{\quad \vdash \quad}
+\newcommand{\quadand}{\quad\text{ and }\quad}
+
+
+\section{Motivation}
+
+This paper is an attempt to formalize a model for AGI based on a confluent theory based on a mix of $\lambda$-calculus, typed $\lambda$-calculus, dependent types, proof theory but also from philosophical and experimental observations about living beings.
+
+\subsection{Pre-requisites}
+
+If we take the perspective of the brain being a computation device and more particularly the neo-cortex, it certainly must hold that there are 3 important categories of neurons to study: sensor and motor neurons and the others. There are two views on semantic meaning of the world: the model-theoretic meaning which states that there exist some kind of perfect representation of the world that all beings partially share in the way they compute things. This means that if $O$ is part of the world that is observed by two creatures, they should certainly end up with the same model for $O$. This is the view taken by most leading AI projects lately. They try to make their AI converge to the same model of the world by somehow stipulating that there exists a perfect curve $C$ that can be approached as close as possible by providing samples. It resembles some kind of logistic regression but in very high dimensional non-linear space.\\
+\\
+The second view is the experience grounded semantic which stipulates that the model of the world in each individual is very dependent on the sensory inputs they received. This means that the model of $O$ for two creatures who lived different experiences can be very different as long as those models explain what they have observed so far. Even if those agents have lived the same observations, their model of the world can theoretically be very different because there is always an infinity of ways to explain some observations.\\
+\\
+In this paper, I chose to take the second view as hypothesis because philosophically, there is no reason that an agent have any way to measure how far it is from the perfect model of the world because it is simply not accessible to anybody. That's why we do fundamental research with the part of the universe we get to observe. Can we assume that we know what would be the Truth billions light years from here? This means in my opinion that we should take observations as evidence of what is produced by the Truth and \textbf{only that} can be taken as evidence. From there, the living being can try to hypothesize the model that explains those irrefutable evidences and I feel like this is a task that is only worthy of reasoning rather than curve fitting. More precisely, I consider reasoning as a generalization of computation. Hence, this paper focuses on formal proof systems and in this specific case, the reverse, hypothesizing based irrefutable evidences. Fundamentally, those evidences gives the structure of the model that would not exist otherwise.
+
+One tries to fit a hypothetical perfect model
+One tries to fit its own experience which is based on an hypothetically perfect model.
+
+\section{Language}
+
+\subsection{\texorpdfstring{$\lambda^\lambda$}{λ^λ}}
+
+Expressions in the lambda calculus are called \(\lambda\)-terms. The following inductive definition establishes how the set \(\Lambda\) of all \(\lambda\)-terms is constructed. To start with, we assume the existence of an infinite set \(\mathbb{V}\) of so-called variables:
+\[
+    \mathbb{V} = \{ x, y, z, \dots \}
+\]
+The following then defines the rules of the language.
+\begin{definition}The set \(\Lambda\) of all \lterms are defined as:\\\\
+\begin{tabular}{ll}
+    (variable)              & If \(u \in \mathbb{V}\) then \(u \in \Lambda\). \\
+    (application)           & If \(M, N \in \Lambda\) then \((MN) \in \Lambda\).  \\
+    (typed abstraction)     & If \(u \in \mathbb{V}\) and \(T, M \in \Lambda\) then \((\lambda u : T .\, M) \in \Lambda\).  \\
+    (untyped abstraction)   & If \(u \in \mathbb{V}\) and \(M \in \Lambda\) then \((\lambda u .\, M) \in \Lambda\).
+\end{tabular}
+\end{definition}
+
+\medskip
+
+\noindent The grammar looks like this
+\[
+\mathbb{E} = \mathbb{V} \mid \mathbb{E}\ \mathbb{E} \mid \lambda \mathbb{V}.\mathbb{E} \mid \lambda \mathbb{V}\colon\mathbb{E}.\mathbb{E} \mid (\mathbb{E})
+\]
+This language naturally extends the notion of \alphaequivalence to the typed abstraction rule. However, \betareduction is extended to a new reduction operator called \taureduction that will be introduced later. The letter $\tau$ has been chosen arbitrarily because it sounds similar to types and \taureduction is really about typed reduction.\\
+
+\section{Calculus}
+
+\begin{definition}[Alpha-equivalence]
+\label{def:alpha_equiv}
+Let $\Lambda$ be the set of all $\lambda$-terms. The \alphaequivalence relation 
+$\alphaeq$ is the smallest equivalence relation satisfying:
+
+\begin{enumerate}
+    \item \textbf{Variable:} \( x \equiv_\alpha x \) for any variable \( x \).
+    \item \textbf{Untyped Variable Renaming:} If \( y \) is a variable that does not appear free in \( M \),
+      \[
+        \lambda x.M \equiv_\alpha \lambda y.\,\bigl(M[y/x]\bigr).
+      \]
+    \item \textbf{Typed Variable Renaming:} If \( y \) does not appear free in \( M \) and \( N \),
+      \[
+        \lambda x:N.\,M \equiv_\alpha \lambda y:N.\,\bigl(M[y/x]\bigr).
+      \]
+    \item \textbf{Application Congruence:} If \( M_1 \equiv_\alpha N_1 \) and \( M_2 \equiv_\alpha N_2 \),
+      \[
+        M_1 M_2 \equiv_\alpha N_1 N_2.
+      \]
+    \item \textbf{Reflexivity:} \( M \alphaeq M \) for all \( M \in \Lambda \).
+    \item \textbf{Symmetry:} If \( M \alphaeq N \), then \( N \alphaeq M \).
+    \item \textbf{Transitivity:} If \( M \alphaeq N \) and \( N \alphaeq P \), then \( M \alphaeq P \).
+\end{enumerate}
+
+The relation $\equiv_\alpha$ is taken to be an equivalence relation 
+(\emph{i.e.}, reflexive, symmetric, transitive) and is closed under all 
+contexts in $\lambda$-terms. In particular, two terms are \alphaequivalent 
+if and only if one can be obtained from the other by a (finite) sequence of 
+bound-variable renamings.
+\end{definition}
+
+\begin{reusable}{lemma}{lemmaTypedAbstractionStructuralCongruence}
+If $\lambda x:M.N \alphaeq \lambda y:M'.N'$ then $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{reusable}
+The proof is in \cref{proof:lemmaTypedAbstractionStructuralCongruence}.
+
+\begin{reusable}{lemma}{lemmaUntypedAbstractionStructuralCongruence}
+If $\lambda x.M \alphaeq \lambda y:.M'$ then $M \alphaeq M'$.
+\end{reusable}
+Obviously, the proof for untyped abstraction is similar to the one for the typed abstraction.
+
+\begin{reusable}{lemma}{lemmaApplicationStructuralCongruence}
+If $MN \alphaeq M'N'$ then $M \alphaeq M'$ and $N \alphaeq N'$
+\end{reusable}
+The proof of this lemma is in \cref{proof:lemmaApplicationStructuralCongruence}.
+
+\begin{reusable}{lemma}{lemmaAlphaEqSubstitutionDoubleAlphaEq}
+If $M_1 \alphaeq N_1$ and $M_2 \alphaeq N_2$ then $[N_1/x]M_1 \alphaeq [N_2/x]M_2$.
+\end{reusable}
+
+This lemma is stated without proof.
+
+\subsection{Free Variables as irrefutable evidences}
+
+Since sensory information are assumed to be the only available external information provided to the brain, they are treated specifically here. Any free variable that enters the system through the sensory layer represents an irrefutable evidence of this symbol. In type theory and proof theory, we would say that a variable $a$ is the only inhabitant of the type $a$ it represents. We shall see later how this relates to \taureduction.
+
+\subsection{Divergence from types}
+
+In the dependent type, there are two distinct concepts forming the theory: the \lcalc and the type calculus or $\Pi$ and $\Sigma$ calculus. However, I argue that there is no reason to consider the type of a \lterm differently than its own expression. Therefore, in what follows, the notion of type is abandoned in favor of a new condition for applying abstraction based on the fact that we use the formalism of proposition as types and proofs as terms. If we collapse the set of proofs of a given expression with the set of all elements it represents then proofs and propositions are both \lterms that transform into each other, more formally if the term $p$ is an element of the term $P$, then there exists a term $F_{p}$ compatible with $p$ such that $F_{p}p \totau P$.\\
+\\
+However, one interesting idea from typed \lcalc was the use of the typing rules that specify which expressions are legal or compatible and which are not. For example, if $a$ is a variable, one could ask what should be the type of $aa$. Provided that free variables represent their own type $a$ is of type $a$ which is not an abstraction, and therefore the application $aa$ must certainly be meaningless or illegal, in other words, $a$ is not compatible with $a$.
+
+\begin{definition}[\osteptaureduction $\stotau$]
+\[
+\begin{array}{ll}
+    \vdash (\lambda x.A)N \stotau [N/x]A & \text{(untyped reduction)} \\
+    M \alphaeq N \quadvdash (\lambda x:M.A)N \stotau [N/x]A & \text{(typed reduction)} \\
+    M \stotau N \quadvdash \lambda x.M \stotau \lambda x.N & \text{(untyped compat}) \\
+    M \stotau N \quadvdash \lambda x:M.P \stotau \lambda x:N.P & \text{(typed arg compat}) \\
+    M \stotau N \quadvdash \lambda x:P.M \stotau \lambda x:P.N & \text{(typed body compat)} \\
+    M \stotau N \quadvdash MP \stotau NP & \text{(left app compat)} \\
+    M \stotau N \quadvdash PM \stotau PN & \text{(right app compat)}\\
+\end{array}
+\]
+\end{definition}
+
+\begin{definition} We say that any $M$ is \osteptaureducible if there is a $N$ such that $M \stotau N$.
+\end{definition}
+
+This notion of \osteptaureduction extends the notion of one-step \betareduction of standard \lcalc with the notion of typing intertwined with the expressions. Both notions are merged into one instead of having a dedicated treatment for terms and for types. In fact, in dependent types, the expression of a type with $\Pi$ or $\Sigma$ notation can somehow be expressed as standard \lterms and the notion of return type can be interpreted as the kind of expression that remains after applying \msteptaureduction which we shall define a bit later.
+
+\begin{examples}
+\[
+\begin{array}{ll}
+    & (\lambda x:a.x) a \stotau a \\
+    & (\lambda x:a.x) ((\lambda y:a.y) a) \stotau a \\
+    & (\lambda x:a.b) a \stotau b \\
+    & (\lambda x:(\lambda y:a.y).x) (\lambda y:a.y) \stotau \lambda y:a.y \\
+    & (\lambda x:(\lambda y:a.y).x) (\lambda z:a.z) \stotau \lambda z:a.z \\
+    & (\lambda x:(a b).x) (a b) \stotau (a b) \\
+    & \text{\osteptaureduction does not apply to $(\lambda x:a.x) b$ because $a \not\alphaeq b$.} \\
+\end{array}
+\]
+\end{examples}
+
+In the following section, we build some lemmas around this new \osteptaureduction definition.
+
+\begin{lemma}
+    $(\lambda x:M.A)M \stotau [M/x]A$
+\end{lemma}
+
+\begin{proof}
+    For any $M \in \Lambda$, $M \alphaeq M$ and therefore we can apply the typed reduction rule from the definition and conclude $(\lambda x:M.A)M \stotau [M/x]A$
+\end{proof}
+
+\begin{lemma}
+    If $(\lambda x:M.A)N$ is \osteptaureducible then $(\lambda y:N.B)M$ is also \osteptaureducible.
+\end{lemma}
+
+\begin{proof}
+    We are clearly in the case of typed reduction and since \alphaequivalence is symmetric we can conclude that if $(\lambda x:M.A)N$ is \osteptaureducible then $(\lambda y:N.B)M$ is also \osteptaureducible.
+\end{proof}
+
+\begin{reusable}{lemma}{theoremSingleTauPreservedUnderAlphaEq}
+    If $M \stotau N$ and $M \alphaeq M'$ then there exists an $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$.
+\end{reusable}
+The proof is given in \cref{proof:theoremSingleTauPreservedUnderAlphaEq}.
+
+\begin{reusable}{lemma}{singleTauReducesToAllAlphaEquivalentExpressions}
+    If $M \stotau N$ then there exist an $M'$ and $N'$ such that $M' \stotau N'$ with $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{reusable}
+The proof is given in \cref{proof:singleTauReducesToAllAlphaEquivalentExpressions}.
+
+\begin{restatable}{definition}{multiStepTauReductionDefinition}[\msteptaureduction $\totau$]
+\label{multiStepTauReductionDefinition}
+We say that $M$ \taureduces to $N$ or equivalently $M \totau N$ if there is an $n \in \mathbb{N}$ such that $n \geq 0$ and there are terms $M_{0}$ to $M_{n}$ such that $M_{0} \alphaeq M$, $M_{n} \alphaeq N$ and $\forall i \in \mathbb{N}$ such that $0 \leq i < n$:
+\[
+M_{i} \stotau M_{i+1}
+\]
+\end{restatable}
+
+In other words, there is chain of \osteptaureductions starting with $M$ and ending with $N$:
+\[
+M \alphaeq M_{0} \stotau M_{1} \stotau ... \stotau M_{n-1} \stotau M_{n} \alphaeq N
+\]
+
+\begin{lemma}
+    $\totau$ extends $\stotau$. In other words, if $M \stotau N$ then $M \totau N$.
+\end{lemma}
+
+\begin{proof}
+    Suppose that $M \stotau N$. If we take $M_{0}=M$ and $M_{1}=N$, then we know $M=M_{0} \stotau M_{1}=N$. However since equality implies \alphaequivalence , $M \alphaeq M_{0} \stotau M_{1} \alphaeq$ and this is the definition of $M \totau N$.
+\end{proof}
+
+
+\begin{lemma}
+    \taureduction is reflexive.
+\end{lemma}
+
+\begin{proof}
+    Case where $n=0$ in \cref{multiStepTauReductionDefinition}.
+\end{proof}
+
+\begin{lemma}
+    \taureduction is transitive. More formally, for all $M, N, P$, if $M \totau N$ and $N \totau P$ then $M \totau P$.
+\end{lemma}
+
+\begin{proof}
+    Let $M, N, P$ be such that $M \totau N$ and $N \totau P$. Therefore, there exist $n_1$ and $n_2$ such that:
+    $M \alphaeq M_{0} \stotau M_{1} \stotau ... \stotau M_{n_1} \alphaeq N$ and $N \alphaeq N_{0} \stotau N_{1} \stotau ... \stotau N_{n_2} \alphaeq P$. Since $M_{n_1} \alphaeq N_{0}$ by transitivity with $N$, we can rename the variables in $N_{0}$ so that the new term $\tilde{N_{0}}$ is equal to $M_{n_1}$. We can then rename all subsequent terms (terms with a \textasciitilde) until $P$ thanks to \cref{theoremSingleTauPreservedUnderAlphaEq}. Therefore $M \alphaeq M_{0} \stotau M_{1} \stotau ... \stotau M_{n_1-1} \stotau \tilde{N_0} \stotau \tilde{N_{1}} \stotau ... \stotau \tilde{N_{n_2}} \alphaeq P$. Hence, we conclude $M \totau P$.
+\end{proof}
+
+\begin{definition}
+    We say that $N$ is applicable to $M$ if either:
+    \begin{itemize}
+        \item $M \alphaeq \lambda x:P.A$ and $N \alphaeq P$
+        \item $M \alphaeq \lambda x.A$
+    \end{itemize}
+\end{definition}
+
+This relates to the fact that we can apply an argument to a function if either the function does not have any constraint on the type or if the type of the argument matches the expected type of the function. 
+
+\begin{examples}
+    Here are some examples of applicability.
+    \begin{itemize}
+        \item if $a$ is a free variable then $a$ is not applicable to itself.
+        \item $a$ is applicable to $\lambda x:a.M$ because $a \alphaeq a$ by reflexivity of \alphaequivalence.
+        \item $b$ is not applicable to $\lambda x:a.M$.
+        \item any expression is applicable to $\lambda x.M$.
+    \end{itemize}
+\end{examples}
+
+\begin{definition}[\tauconversion or $\taueq$]
+    $M \taueq N$ if there is an $n \in \mathbb{N}$ such that $n \geq 0$ and there are terms $M_{0}$ to $M_{n}$ such that $M_{0} \alphaeq M$, $M_{n} \alphaeq N$ and $\forall i \in \mathbb{N}$ such that $0 \leq i < n$:
+\[
+\textit{Either}\quad M_{i} \stotau M_{i+1}\quad\textit{ or }\quad M_{i+1} \stotau M_{i}
+\]
+\end{definition}
+
+\begin{reusable}{lemma}{lemmaTauEqExtendsTauReduction}
+    $\taueq$ extends $\totau$ in both directions, or in other words, if $M \totau N$ or $N \totau M$ then $M \taueq N$.
+\end{reusable}
+
+\begin{proof}
+If $M \totau N$, then all $\tau$-steps are in the direction $M_{i} \stotau M_{i+1}$ in the definition of \tauequivalence. In that case $M \taueq N$.\\
+If $N \totau M$, then all steps are in the other direction in the definition of \tauequivalence and $M \taueq N$ still holds.
+\end{proof}
+
+\begin{reusable}{theorem}{theoremTauEqIsAnEquivalenceRelation}
+    The relation $\taueq$ is an equivalence relation, i.e., it is reflexive, symmetric and transitive.
+\end{reusable}
+
+The proof is given in \cref{proof:theoremTauEqIsAnEquivalenceRelation}
+
+\begin{reusable}{proposition}{test}
+    A variable $a$ is applicable to $\lambda x:A.M$ if and only if $A \totau a$.
+\end{reusable}
+
+\begin{reusable}{proposition}{test2}
+    $N$ is applicable to $\lambda x:M.A$ if and only if $M \taueq N$.
+\end{reusable}
+
+
+\subsection{Proofs as terms}
+
+There is an interpretation of types being inhabited by terms that relates to the Curry-Howard isomorphism. This interpretation is basically that theorems are types and proofs of the theorems are inhabitants of those types. \\
+\\
+There is also some kind of inter-relation between types and expressions that can make us wonder whether the type of the expression should be considered a different thing than the expression itself. It seems hard to justify a dedicated calculus for types. Indeed a proof of $T$ is itself a \lterm and for all proof $x$ there exists a "compatible" term $P_x$ such that $P_x\ x$ $\beta$-reduces to $T$.\\
+\\
+Obviously, the free variables of a \lterm $M$ must all somehow represent the proofs of themselves because they cannot 
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+\thispagestyle{empty} % Remove headers/footers
+
+\vspace*{\fill} % Push text to vertical center
+\begin{center}
+    {\huge \textbf{Appendix}}
+\end{center}
+\vspace*{\fill} % Balance space below
+
+\clearpage
+\appendix
+
+\section{Proofs}
+
+\begin{longproof}{lemmaTypedAbstractionStructuralCongruence}
+We proceed by induction on the derivation of $\lambda x:M.N \alphaeq \lambda y:M'.N'$.
+We then perform a case analysis on the last rule used in that derivation.
+
+\paragraph{Case 1: Reflexivity}
+If $\lambda x:M.N \alphaeq \lambda y:M'.N' $ was concluded by reflexivity, it must be that $y=x, M'=M$ and $N'=N$. By the definition of \alphaequivalence it also means that $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 2: Symmetry}
+If $\lambda x:M.N \alphaeq P$ was concluded by symmetry from $P \alphaeq \lambda x:M.N$, we know by the inductive hypothesis that $P=\lambda y:M'.N'$ with $M \alphaeq M'$ and $N \alphaeq N'$, what we had to prove.
+
+\paragraph{Case 3: Transitivity}
+If $\lambda x:M.N \alphaeq P$ was concluded by transitivity from $\lambda x:M.N \alphaeq Q$ and $Q \alphaeq P$, we know by the inductive hypothesis that $Q=\lambda y:M''.N''$ with $M \alphaeq M''$ and $N \alphaeq N''$. But since $Q$ is a typed lambda abstraction we also now that $P=\lambda z:M'.N'$ with $M'' \alphaeq M'$ and $N'' \alphaeq N'$. However, by transitivity of \alphaequivalence, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 4: Variable}
+This rule cannot transform a variable into a typed abstraction.
+
+\paragraph{Case 5: Application Congruence}
+This rule cannot transform an application into a typed abstraction.
+
+\paragraph{Case 6: Untyped Abstraction Renaming}
+This rule cannot transform an untyped abstraction into a typed abstraction.
+
+\paragraph{Case 7: Typed Abstraction Renaming}
+If $\lambda x:M.N \alphaeq P$ was concluded by renaming of the variable, i.e., by applying the rule to $\lambda y:M.[x/y]N \alphaeq P$ (provided $x \not\in FV(M) \cup FV(N)$), then we can apply the inductive hypothesis and say that $P=\lambda z:M'.N'$ with $M \alphaeq M'$ and $[x/y]N \alphaeq N'$. However, given that $x \not\in FV(M) \cup FV(N)$, $[x/y]N \alphaeq N$ and consequently $N \alphaeq N'$ since substitution does not change \alphaequivalence.
+
+\paragraph{Conclusion}
+Since these seven cases exhaust all the possible final steps in a derivation 
+of $\alpha$-equivalence, we conclude that whenever $\lambda x:M.N \alphaeq \lambda y:M'.N'$, it 
+follows that $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{longproof}
+
+
+%
+%   PROOF
+%
+
+\begin{longproof}{lemmaApplicationStructuralCongruence}
+We proceed by induction on the derivation of $MN \alphaeq M'N'$.
+We then perform a case analysis on the last rule used in that derivation.
+
+\paragraph{Case 1: Reflexivity.}
+If $MN \alphaeq M'N'$ was concluded by reflexivity, then $MN = M'N'$ 
+as raw syntax, so $M = M'$ and $N = N'$. Hence, by reflexivity on subterms, 
+$M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 2: Symmetry.}
+If $MN \alphaeq P$ was concluded by symmetry from $P \alphaeq MN$, then by the inductive hypothesis we know $P$ is an application of the form $M'N'$, with $M \alphaeq M'$ and $N \alphaeq N'$. Thus we conclude $MN \alphaeq M'N'$, which is what we needed to show.
+
+\paragraph{Case 3: Transitivity.}
+If $MN \alphaeq P$ was concluded by transitivity from $MN \alphaeq Q$ and $Q \alphaeq P$, we know by the inductive hypothesis that $Q=M''N''$ with $M \alphaeq M''$ and $N \alphaeq N''$. But since $Q$ is an application we also now that $P=M'N'$ with $M'' \alphaeq M'$ and $N'' \alphaeq N'$. However, by transitivity of \alphaequivalence, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 4: Variable}
+This rule cannot transform a variable into an application.
+
+\paragraph{Case 5: Untyped Abstraction Renaming}
+This rule cannot transform an untyped abstraction into an application.
+
+\paragraph{Case 6: Typed Abstraction Renaming}
+This rule cannot transform a typed abstraction into an application.
+
+\paragraph{Case 7: Application Congruence}
+If $MN \alphaeq M'N'$ was concluded by the congruence rule from it is necessarily with the following premises $M \alphaeq M'$ and $N \alphaeq N'$ as premises, what was to be proven.
+
+\paragraph{Conclusion}
+Since these seven cases exhaust all the possible final steps in a derivation 
+of $\alpha$-equivalence, we conclude that whenever $M N \alphaeq M' N'$, it 
+follows that $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{longproof}
+
+%
+%   PROOF
+%
+
+\begin{longproof}{theoremSingleTauPreservedUnderAlphaEq}
+We proceed by structural induction with case analysis.
+
+\paragraph{Untyped Reduction}
+Let $M=(\lambda x.A)Q$. By the untyped reduction rule we get $(\lambda x.A)Q \stotau N$ with $N=[Q/x]A$.\\
+Let $M'$ such that $M' \alphaeq M$. By \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}, $M'$ must be of the form $(\lambda y.A'')Q'$ with $A \alphaeq A''$ and $Q \alphaeq Q'$. Obviously by renaming the variable $y$ into $x$ we can conclude that $M'$ is of the form $(\lambda x.A')Q'$ and $A' \alphaeq A'' \alphaeq A$.
+By the untyped abstraction rule, we know that $M' \stotau N'$ with $N'=[Q'/x]A'$. Then, from \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq} and given we know that $A \alphaeq A'$ and $Q \alphaeq Q'$, we can derive $N=[Q/x]A \alphaeq [Q'/x]A'=N'$ and therefore by transitivity $N \alphaeq N'$.
+
+\paragraph{Typed Reduction}
+If $M \stotau N$, it means that there exists $P$ and $Q$ such that $M=(\lambda x:P.A)Q$, $P \alphaeq Q$ and $N=[Q/x]A$.\\
+Moreover, since $M \alphaeq M'$, given \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}, it means that there exist $A',P',Q'$ such that $M'=(\lambda x:P'.A')Q'$ with $P' \alphaeq P$, $Q' \alphaeq Q$ and $A \alphaeq A'$. Moreover, since $P' \alphaeq P \alphaeq Q \alphaeq Q'$ we can conclude $P' \alphaeq Q'$ and therefore $M' \stotau N'$ with $N'=[Q'/x]A'$.\\
+From \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq} and $Q \alphaeq Q'$ and $A \alphaeq A'$, we conclude $[Q/x]A \alphaeq [Q'/x]A'$ and therefore $N \alphaeq N'$.
+
+\paragraph{Untyped Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. But because $M' \stotau N'$ we can apply the Untyped Abstraction rule and $\lambda x.M' \stotau \lambda x.N'$. Additionally, by the compatibility rule of \alphaequivalence, we have $N \alphaeq N'$ that implies $\lambda x:N \alphaeq \lambda x:N'$ and that completes the proof for this case.
+
+\paragraph{Typed Argument Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then by the inductive hypothesis there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. Since $M' \stotau N'$, we can apply the Typed Arg Compatibility rule for any $A$. Hence, $\lambda x:M'.A \stotau \lambda x:N'.A$. Additionally, by the compatibility rules of \alphaequivalence, we have $N \alphaeq N'$ that implies $\lambda x:N.A \alphaeq \lambda x:N'.A$ for any $A$ and that completes the proof for this case.
+
+\paragraph{Typed Body Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then by the inductive hypothesis there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. Since $M' \stotau N'$, we can apply the Typed Body Compatibility rule for any $A$. Hence, $\lambda x:A.M' \stotau \lambda x:A.N'$. Additionally, by the compatibility rules of \alphaequivalence, we have $N \alphaeq N'$ that implies $\lambda x:A.N \alphaeq \lambda x:A.N'$ for any $A$ and that completes the proof for this case.
+
+\paragraph{Left Application Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then by the inductive hypothesis there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. Since $M' \stotau N'$, we can apply the Left Application Compatibility rule for any $P$. Hence, $M'P \stotau N'P$. Additionally, by the compatibility rules of \alphaequivalence, we have $N \alphaeq N'$ that implies $N'P \alphaeq \lambda M'P$ for any $P$ and that completes the proof for this case.
+
+\paragraph{Right Application Compatibility}
+Same argument than for the right application.
+
+\paragraph{Conclusion}
+By structural induction, we have proven that single-step \taureduction respects \alphaequivalence.
+
+\end{longproof}
+
+
+%
+%   PROOF
+%
+
+\begin{longproof}{singleTauReducesToAllAlphaEquivalentExpressions}
+We proceed by structural induction with case analysis.
+
+\paragraph{Untyped Reduction}
+Let $M=(\lambda x.A)P$ then by application of the untyped reduction rule, $M$ \taureduces in a single step to $N=[P/x]A$. Let $M'=(\lambda x.A)P'$ such that $P' \alphaeq P$ and let $N'=[P'/x]A$. It follows that $M' \stotau N'$ by the application of the untyped reduction rule. Since substitution in \alphaequivalent expressions maintains \alphaequivalence (by \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq}) we have $N \alphaeq N'$. We also have that $M$ and $M'$ are \alphaequivalent because two expressions with equivalent structures are \alphaequivalence (by \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}). We conclude that there exists $M'$ and $N'$ with $M' \stotau N'$, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Typed Reduction}
+Let $M=(\lambda x:P.A)Q$ and $N$. Assume that $M \stotau N$, therefore we know that $P$ and $Q$ must be such that $P \alphaeq Q$ and $N=[Q/x]A$. Let $P'$ and $Q'$ such that $P' \alphaeq P$ and $Q' \alphaeq Q$. By \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq}, $N'=[Q'/x]P'$ is \alphaequivalent to $N$. Let $M'=(\lambda x:P'.A)Q'$. Since we know $P' \alphaeq P \alphaeq Q \alphaeq Q'$, we deduce by transitivity of \alphaequivalence that $P' \alphaeq Q'$ and therefore $M' \stotau N'$ by application of the typed reduction rule. We also have that $M$ and $M'$ are \alphaequivalent because two expressions with equivalent structures are \alphaequivalence (by \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}). Hence, we conclude that there exists a $M'$ and $N'$ such that $M' \stotau N'$, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Untyped Compatibility}
+Let $M_0, N_0$ and $N_0'$ such that $M_0 \stotau N_0$. By the inductive hypothesis, we know that there exists a $M_0'$ such that $M_0' \stotau N_0'$, $M_0 \alphaeq M_0'$ and $N_0 \alphaeq N_0'$. By the untyped abstraction compatiblity rule of \taureduction, we deduce $M_1' \stotau N_1'$ with $M_1'=\lambda x.M_0'$ and $N_1'=\lambda x.N_0'$. Also $N_1=\lambda x.N_0 \alphaeq \lambda x.N_0'=N_1'$ by the compability rule of \alphaequivalence applied to $N_0$ and $N_0'$. Additionally, the expression $M_1'$ is \alphaequivalent to $M_1$ by the \cref{lemmaUntypedAbstractionStructuralCongruence}. Hence, we conclude that there is a $M_1'$ and $N_1'$ such that $M_1' \stotau N_1'$, $M_1 \alphaeq M_1'$ and $N_1 \alphaeq N_1'$.
+
+\paragraph{Typed Argument Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Typed Body Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Left Application Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Right Application Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Conclusion}
+By structural induction, we have proven that if $M \stotau N$ then there exists $M'$ and $N'$ such that $M' \stotau N'$, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\end{longproof}
+
+
+\begin{longproof}{theoremTauEqIsAnEquivalenceRelation}
+We need to prove reflexivity, symmetry and transitivity.
+
+\paragraph{Reflexivity}
+It is trivial to see that for all $M$ and $n=0$, $M$ satisfies the definition of \tauconversion and therefore $M \taueq M$. Therefore, $\taueq$ is reflexive.
+
+\paragraph{Symmetry}
+Let $M$ and $N$ such that $M \taueq N$. It means that there exists a chain of length $n$ where $M \alphaeq M_{0}$, $N \alphaeq M_{n}$ and for all $0 \leq i < 0$ either $M_{i} \stotau M_{i+1}$ or $M_{i+1} \stotau M_{i}$. Informally speaking, given there is a chain for $M \taueq N$, there is a reverse chain going from $N$ to $M$. More formally, if for $M \taueq N$ and $0 \leq i < n$, $M_i \stotau M_{i+1}$ then for $N \taueq M$, $M_{n-(i+1)} \stotau M_{n-i}$. The same reasoning apply for the other direction. We conclude that since for all $i$, there is a step in either direction then there is a chain from $N$ to $M$ and therefore $N \taueq M$ which proves symmetry.
+
+\paragraph{Transitivity}
+Let $M, N, P$ be such that $M \taueq N$ and $N \taueq P$. Then, there exists a chain of single-step \taureduction going from $M$ to $N$ and one from $N$ to $P$. It is obvious that, up to variable renaming as we did when proving transitivity of \taureduction, there exists a chain of single steps in either direction from $M$ to $P$. We conclude that $M \taueq N$ and $N \taueq P$ implies $M \taueq P$.
+\end{longproof}

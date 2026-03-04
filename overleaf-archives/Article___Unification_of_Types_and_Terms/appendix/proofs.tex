@@ -1,0 +1,170 @@
+\begin{longproof}{lemmaTypedAbstractionStructuralCongruence}
+We proceed by induction on the derivation of $\lambda x:M.N \alphaeq \lambda y:M'.N'$.
+We then perform a case analysis on the last rule used in that derivation.
+
+\paragraph{Case 1: Reflexivity}
+If $\lambda x:M.N \alphaeq \lambda y:M'.N' $ was concluded by reflexivity, it must be that $y=x, M'=M$ and $N'=N$. By the definition of \alphaequivalence it also means that $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 2: Symmetry}
+If $\lambda x:M.N \alphaeq P$ was concluded by symmetry from $P \alphaeq \lambda x:M.N$, we know by the inductive hypothesis that $P=\lambda y:M'.N'$ with $M \alphaeq M'$ and $N \alphaeq N'$, what we had to prove.
+
+\paragraph{Case 3: Transitivity}
+If $\lambda x:M.N \alphaeq P$ was concluded by transitivity from $\lambda x:M.N \alphaeq Q$ and $Q \alphaeq P$, we know by the inductive hypothesis that $Q=\lambda y:M''.N''$ with $M \alphaeq M''$ and $N \alphaeq N''$. But since $Q$ is a typed lambda abstraction we also now that $P=\lambda z:M'.N'$ with $M'' \alphaeq M'$ and $N'' \alphaeq N'$. However, by transitivity of \alphaequivalence, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 4: Variable}
+This rule cannot transform a variable into a typed abstraction.
+
+\paragraph{Case 5: Application Congruence}
+This rule cannot transform an application into a typed abstraction.
+
+\paragraph{Case 6: Untyped Abstraction Renaming}
+This rule cannot transform an untyped abstraction into a typed abstraction.
+
+\paragraph{Case 7: Typed Abstraction Renaming}
+If $\lambda x:M.N \alphaeq P$ was concluded by renaming of the variable, i.e., by applying the rule to $\lambda y:M.[x/y]N \alphaeq P$ (provided $x \not\in FV(M) \cup FV(N)$), then we can apply the inductive hypothesis and say that $P=\lambda z:M'.N'$ with $M \alphaeq M'$ and $[x/y]N \alphaeq N'$. However, given that $x \not\in FV(M) \cup FV(N)$, $[x/y]N \alphaeq N$ and consequently $N \alphaeq N'$ since substitution does not change \alphaequivalence.
+
+\paragraph{Conclusion}
+Since these seven cases exhaust all the possible final steps in a derivation 
+of $\alpha$-equivalence, we conclude that whenever $\lambda x:M.N \alphaeq \lambda y:M'.N'$, it 
+follows that $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{longproof}
+
+
+%
+%   PROOF
+%
+
+\begin{longproof}{lemmaApplicationStructuralCongruence}
+We proceed by induction on the derivation of $MN \alphaeq M'N'$.
+We then perform a case analysis on the last rule used in that derivation.
+
+\paragraph{Case 1: Reflexivity.}
+If $MN \alphaeq M'N'$ was concluded by reflexivity, then $MN = M'N'$ 
+as raw syntax, so $M = M'$ and $N = N'$. Hence, by reflexivity on subterms, 
+$M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 2: Symmetry.}
+If $MN \alphaeq P$ was concluded by symmetry from $P \alphaeq MN$, then by the inductive hypothesis we know $P$ is an application of the form $M'N'$, with $M \alphaeq M'$ and $N \alphaeq N'$. Thus we conclude $MN \alphaeq M'N'$, which is what we needed to show.
+
+\paragraph{Case 3: Transitivity.}
+If $MN \alphaeq P$ was concluded by transitivity from $MN \alphaeq Q$ and $Q \alphaeq P$, we know by the inductive hypothesis that $Q=M''N''$ with $M \alphaeq M''$ and $N \alphaeq N''$. But since $Q$ is an application we also now that $P=M'N'$ with $M'' \alphaeq M'$ and $N'' \alphaeq N'$. However, by transitivity of \alphaequivalence, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Case 4: Variable}
+This rule cannot transform a variable into an application.
+
+\paragraph{Case 5: Untyped Abstraction Renaming}
+This rule cannot transform an untyped abstraction into an application.
+
+\paragraph{Case 6: Typed Abstraction Renaming}
+This rule cannot transform a typed abstraction into an application.
+
+\paragraph{Case 7: Application Congruence}
+If $MN \alphaeq M'N'$ was concluded by the congruence rule from it is necessarily with the following premises $M \alphaeq M'$ and $N \alphaeq N'$ as premises, what was to be proven.
+
+\paragraph{Conclusion}
+Since these seven cases exhaust all the possible final steps in a derivation 
+of $\alpha$-equivalence, we conclude that whenever $M N \alphaeq M' N'$, it 
+follows that $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{longproof}
+
+
+%
+%   PROOF
+%
+
+\begin{longproof}{theoremSingleTauPreservedUnderAlphaEq}
+We proceed by structural induction with case analysis.
+
+\paragraph{Untyped Reduction}
+Let $M=(\lambda x.A)Q$. By the untyped reduction rule we get $(\lambda x.A)Q \stotau N$ with $N=[Q/x]A$.\\
+Let $M'$ such that $M' \alphaeq M$. By \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}, $M'$ must be of the form $(\lambda y.A'')Q'$ with $A \alphaeq A''$ and $Q \alphaeq Q'$. Obviously by renaming the variable $y$ into $x$ we can conclude that $M'$ is of the form $(\lambda x.A')Q'$ and $A' \alphaeq A'' \alphaeq A$.
+By the untyped abstraction rule, we know that $M' \stotau N'$ with $N'=[Q'/x]A'$. Then, from \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq} and given we know that $A \alphaeq A'$ and $Q \alphaeq Q'$, we can derive $N=[Q/x]A \alphaeq [Q'/x]A'=N'$ and therefore by transitivity $N \alphaeq N'$.
+
+\paragraph{Typed Reduction}
+If $M \stotau N$, it means that there exists $P$ and $Q$ such that $M=(\lambda x:P.A)Q$, $P \alphaeq Q$ and $N=[Q/x]A$.\\
+Moreover, since $M \alphaeq M'$, given \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}, it means that there exist $A',P',Q'$ such that $M'=(\lambda x:P'.A')Q'$ with $P' \alphaeq P$, $Q' \alphaeq Q$ and $A \alphaeq A'$. Moreover, since $P' \alphaeq P \alphaeq Q \alphaeq Q'$ we can conclude $P' \alphaeq Q'$ and therefore $M' \stotau N'$ with $N'=[Q'/x]A'$.\\
+From \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq} and $Q \alphaeq Q'$ and $A \alphaeq A'$, we conclude $[Q/x]A \alphaeq [Q'/x]A'$ and therefore $N \alphaeq N'$.
+
+\paragraph{Untyped Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. But because $M' \stotau N'$ we can apply the Untyped Abstraction rule and $\lambda x.M' \stotau \lambda x.N'$. Additionally, by the compatibility rule of \alphaequivalence, we have $N \alphaeq N'$ that implies $\lambda x:N \alphaeq \lambda x:N'$ and that completes the proof for this case.
+
+\paragraph{Typed Argument Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then by the inductive hypothesis there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. Since $M' \stotau N'$, we can apply the Typed Arg Compatibility rule for any $A$. Hence, $\lambda x:M'.A \stotau \lambda x:N'.A$. Additionally, by the compatibility rules of \alphaequivalence, we have $N \alphaeq N'$ that implies $\lambda x:N.A \alphaeq \lambda x:N'.A$ for any $A$ and that completes the proof for this case.
+
+\paragraph{Typed Body Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then by the inductive hypothesis there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. Since $M' \stotau N'$, we can apply the Typed Body Compatibility rule for any $A$. Hence, $\lambda x:A.M' \stotau \lambda x:A.N'$. Additionally, by the compatibility rules of \alphaequivalence, we have $N \alphaeq N'$ that implies $\lambda x:A.N \alphaeq \lambda x:A.N'$ for any $A$ and that completes the proof for this case.
+
+\paragraph{Left Application Compatibility}
+Suppose $M \alphaeq M'$ and $M \stotau N$, then by the inductive hypothesis there exists $N'$ such that $M' \stotau N'$ and $N \alphaeq N'$. Since $M' \stotau N'$, we can apply the Left Application Compatibility rule for any $P$. Hence, $M'P \stotau N'P$. Additionally, by the compatibility rules of \alphaequivalence, we have $N \alphaeq N'$ that implies $N'P \alphaeq \lambda M'P$ for any $P$ and that completes the proof for this case.
+
+\paragraph{Right Application Compatibility}
+Same argument than for the right application.
+
+\paragraph{Conclusion}
+By structural induction, we have proven that single-step \taureduction respects \alphaequivalence.
+
+\end{longproof}
+
+
+%
+%   PROOF
+%
+
+\begin{longproof}{singleTauReducesToAllAlphaEquivalentExpressions}
+We proceed by structural induction with case analysis.
+
+\paragraph{Untyped Reduction}
+Let $M=(\lambda x.A)P$ then by application of the untyped reduction rule, $M$ \taureduces in a single step to $N=[P/x]A$. Let $M'=(\lambda x.A)P'$ such that $P' \alphaeq P$ and let $N'=[P'/x]A$. It follows that $M' \stotau N'$ by the application of the untyped reduction rule. Since substitution in \alphaequivalent expressions maintains \alphaequivalence (by \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq}) we have $N \alphaeq N'$. We also have that $M$ and $M'$ are \alphaequivalent because two expressions with equivalent structures are \alphaequivalence (by \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}). We conclude that there exists $M'$ and $N'$ with $M' \stotau N'$, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Typed Reduction}
+Let $M=(\lambda x:P.A)Q$ and $N$. Assume that $M \stotau N$, therefore we know that $P$ and $Q$ must be such that $P \alphaeq Q$ and $N=[Q/x]A$. Let $P'$ and $Q'$ such that $P' \alphaeq P$ and $Q' \alphaeq Q$. By \cref{lemmaAlphaEqSubstitutionDoubleAlphaEq}, $N'=[Q'/x]P'$ is \alphaequivalent to $N$. Let $M'=(\lambda x:P'.A)Q'$. Since we know $P' \alphaeq P \alphaeq Q \alphaeq Q'$, we deduce by transitivity of \alphaequivalence that $P' \alphaeq Q'$ and therefore $M' \stotau N'$ by application of the typed reduction rule. We also have that $M$ and $M'$ are \alphaequivalent because two expressions with equivalent structures are \alphaequivalence (by \cref{lemmaTypedAbstractionStructuralCongruence} and \cref{lemmaApplicationStructuralCongruence}). Hence, we conclude that there exists a $M'$ and $N'$ such that $M' \stotau N'$, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\paragraph{Untyped Compatibility}
+Let $M_0, N_0$ and $N_0'$ such that $M_0 \stotau N_0$. By the inductive hypothesis, we know that there exists a $M_0'$ such that $M_0' \stotau N_0'$, $M_0 \alphaeq M_0'$ and $N_0 \alphaeq N_0'$. By the untyped abstraction compatiblity rule of \taureduction, we deduce $M_1' \stotau N_1'$ with $M_1'=\lambda x.M_0'$ and $N_1'=\lambda x.N_0'$. Also $N_1=\lambda x.N_0 \alphaeq \lambda x.N_0'=N_1'$ by the compability rule of \alphaequivalence applied to $N_0$ and $N_0'$. Additionally, the expression $M_1'$ is \alphaequivalent to $M_1$ by the \cref{lemmaUntypedAbstractionStructuralCongruence}. Hence, we conclude that there is a $M_1'$ and $N_1'$ such that $M_1' \stotau N_1'$, $M_1 \alphaeq M_1'$ and $N_1 \alphaeq N_1'$.
+
+\paragraph{Typed Argument Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Typed Body Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Left Application Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Right Application Compatibility}
+Argument is similar to Untyped Compatibility.
+
+\paragraph{Conclusion}
+By structural induction, we have proven that if $M \stotau N$ then there exists $M'$ and $N'$ such that $M' \stotau N'$, $M \alphaeq M'$ and $N \alphaeq N'$.
+
+\end{longproof}
+
+
+\begin{longproof}{theoremTauEqIsAnEquivalenceRelation}
+We need to prove reflexivity, symmetry and transitivity.
+
+\paragraph{Reflexivity}
+It is trivial to see that for all $M$ and $n=0$, $M$ satisfies the definition of \tauconversion and therefore $M \taueq M$. Therefore, $\taueq$ is reflexive.
+
+\paragraph{Symmetry}
+Let $M$ and $N$ such that $M \taueq N$. It means that there exists a chain of length $n$ where $M \alphaeq M_{0}$, $N \alphaeq M_{n}$ and for all $0 \leq i < 0$ either $M_{i} \stotau M_{i+1}$ or $M_{i+1} \stotau M_{i}$. Informally speaking, given there is a chain for $M \taueq N$, there is a reverse chain going from $N$ to $M$. More formally, if for $M \taueq N$ and for a given step $0 \leq i < n$, $M_i \stotau M_{i+1}$ then for $N \taueq M$, $M_{n-(i+1)} \stotau M_{n-i}$. The same reasoning applies for the steps with a reduction in the the other direction. We conclude that since for all $i$, there is a step in either direction then there is a chain from $N$ to $M$ and therefore $N \taueq M$ which proves symmetry.
+
+\paragraph{Transitivity}
+Let $M, N, P$ be such that $M \taueq N$ and $N \taueq P$. Then, there exists a chain of single-step \taureduction going from $M$ to $N$ and one from $N$ to $P$. It is obvious that, up to variable renaming as we did when proving transitivity of \taureduction, there exists a chain of single steps in either direction from $M$ to $P$. We conclude that $M \taueq N$ and $N \taueq P$ implies $M \taueq P$.
+\end{longproof}
+
+
+
+\begin{longproof}{lemmaTauReductionOfTauNfImpliesAlphaEqWithContractum}
+    We proceed by structural induction on the rules of \taureduction.
+
+\paragraph{Basis Case}
+    Let $M$ be a \taunormalform and $N$ such that $M \totau N$. By definition of normal form, $M$ does not contain any \tauredex, that is there is no way to transform $M$ into $N$ by any of the three basis rules of the inductive definition of \taureduction. Therefore, $N$ has necessarily be produced by the compatibility rules and the statement is vacuously true.
+
+\paragraph{Inductive Cases}
+    Let assume by the inductive hypothesis that there is $M'$ in $\taunf$ and $N'$ such that $M' \totau N'$ and $M' \totau N'$. Let us take the case of untyped abstraction compatibility.
+    Let $M=\lambda x.M'$. $M$ is a \taunormalform since constructing the term does not introduce any \tauredex. We also know that $M' \stotau M'$ and therefore by applying the untyped abstraction compatibility rule of \taureduction, we have that $M \stotau N$. Moreover, $M' \alphaeq N'$ and by the untyped abstraction compatibility rule of \alphaequivalence we deduce that $N=\lambda x.N'$ is \alphaequivalent to $M$. Consequently, we have $M$ in $\taunf$ and $N$ such that $M \stotau N$ and $M \alphaeq N$ therefore we can conclude that the statement holds in the case of untyped lambda compatibility rule. We proceed the same way for the other compatibility rules.
+
+\paragraph{Conclusion}
+    We proved by structural induction on the \taureduction rules that if $M$ is in $\taunf$ and $M \totau N$, then we have $M \alphaeq N$.    
+\end{longproof}

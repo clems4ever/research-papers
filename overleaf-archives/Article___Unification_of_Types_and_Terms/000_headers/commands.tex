@@ -1,0 +1,114 @@
+\newcommand{\LambdaTau}{\Lambda^{\tau}}
+
+% Commands for lambda
+\newcommand{\safelambda}{\texorpdfstring{$\lambda$}{lambda}}
+
+\newcommand{\lambdacalc}{\safelambda-calculus\xspace}
+\newcommand{\lambdaexpr}{\safelambda-expression\xspace}
+\newcommand{\lambdaexprs}{\safelambda-expressions\xspace}
+\newcommand{\lambdaterm}{\safelambda-term\xspace}
+\newcommand{\lambdaterms}{\safelambda-terms\xspace}
+\newcommand{\lambdatypes}{\safelambda-types\xspace}
+\newcommand{\lambdatype}{\safelambda-type\xspace}
+
+\newcommand{\safelambdatau}{\texorpdfstring{$\LambdaTau$}{Lambda-Tau}}
+
+\newcommand{\lambdatauterm}{\safelambdatau-term\xspace}
+\newcommand{\lambdatauterms}{\safelambdatau-terms\xspace}
+
+\newcommand{\simplyTypedLambdaCalc}{simply typed \lambdacalc}
+
+% Math symbols around lambda calculus.
+\newcommand{\oftype}{\nobreak\mskip2mu{:}\mskip2mu\nobreak}
+
+% structural equivalence
+\newcommand{\structeq}{\equiv_\mathbf{s}}
+\newcommand{\structequivalence}{structural equivalence}
+
+% Alpha equivalence
+\newcommand{\safealpha}{\texorpdfstring{$\alpha$}{alpha}}
+
+\newcommand{\alphaequivalence}{\safealpha-equivalence\xspace}
+\newcommand{\alphaequivalent}{\safealpha-equivalent\xspace}
+\newcommand{\alphaconversion}{\safealpha-conversion\xspace}
+
+\newcommand{\alphaeq}{\equiv_\alpha}
+
+
+% Sigma equivalence
+\newcommand{\safesigma}{\texorpdfstring{$\sigma$}{sigma}}
+
+\newcommand{\sigmaeq}{\equiv_\sigma}
+\newcommand{\sigmaequivalence}{\safesigma-equivalence\xspace}
+
+\newcommand{\safetau}{\texorpdfstring{$\tau$}{tau}}
+
+% One-step Beta reduction
+\newcommand{\safebeta}{\texorpdfstring{$\beta$}{beta}}
+\newcommand{\stobeta}{\;\triangleright_\beta\;}
+\newcommand{\ostepbetareduction}{one-step \safebeta-reduction\xspace}
+\newcommand{\Ostepbetareduction}{\CapitalizedCommand{\ostepbetareduction}}
+\newcommand{\ostepbetareductions}{one-step \safebeta-reductions\xspace}
+\newcommand{\ostepbetareducible}{one-step \safebeta-reducible\xspace}
+
+\newcommand{\betareduction}{\safebeta-reduction\xspace}
+\newcommand{\betaconversion}{\safebeta-conversion\xspace}
+\newcommand{\betareductions}{\safebeta-reductions\xspace}
+\newcommand{\betareduce}{\safebeta-reduce\xspace}
+\newcommand{\betareduces}{\safebeta-reduces\xspace}
+\newcommand{\betareducible}{\safebeta-reducible\xspace}
+\newcommand{\betaredex}{\safebeta-redex\xspace}
+
+\newcommand{\mstepbetareduction}{multi-step \safebeta-reduction\xspace}
+\newcommand{\mstepbetareducible}{multi-step \safebeta-reducible\xspace}
+
+% One-step Tau reduction
+\newcommand{\stotau}{\;\triangleright_\tau\;}
+\newcommand{\osteptaureduces}{one-step \safetau-reduces\xspace}
+\newcommand{\osteptaureduction}{one-step \safetau-reduction\xspace}
+\newcommand{\Osteptaureduction}{\CapitalizedCommand{\osteptaureduction}}
+\newcommand{\osteptaureductions}{one-step \safetau-reductions\xspace}
+\newcommand{\osteptaureducible}{one-step \safetau-reducible\xspace}
+
+% Multi-step tau reduction
+\newcommand{\totau}{\to_\tau}
+\newcommand{\toptau}{\Rightarrow_\tau}
+\newcommand{\taureduction}{\safetau-reduction\xspace}
+\newcommand{\tauconversion}{\safetau-conversion\xspace}
+\newcommand{\taureductions}{\safetau-reductions\xspace}
+\newcommand{\taureduce}{\safetau-reduce\xspace}
+\newcommand{\taureduces}{\safetau-reduces\xspace}
+\newcommand{\tauredex}{\safetau-redex\xspace}
+\newcommand{\tauredexes}{\safetau-redexes\xspace}
+\newcommand{\taureducible}{\safetau-reducible\xspace}
+
+\newcommand{\msteptaureduction}{multi-step \safetau-reduction\xspace}
+\newcommand{\Msteptaureduction}{\CapitalizedCommand{\msteptaureduction}}
+\newcommand{\msteptaureducible}{multi-step \safetau-reducible\xspace}
+
+% Tau equivalence
+\newcommand{\tauequivalence}{\safetau-equivalence\xspace}
+\newcommand{\tauequivalent}{\safetau-equivalent\xspace}
+\newcommand{\taueq}{=_\tau}
+
+% Tau normal form
+\newcommand{\taunormalform}{\safetau-normal form\xspace}
+\newcommand{\taunf}{\tau\text{-}\text{nf}}
+
+
+\newcommand{\quadvdash}{\quad \vdash \quad}
+\newcommand{\quadand}{\quad\text{ and }\quad}
+
+
+
+%\newcommand{\tlambda}[2]{\lambda #1 \oftype #2}
+
+\def\tabs#1:#2{\lambda #1 \oftype #2}
+\def\uabs#1{\lambda #1}
+\def\app#1#2{#1\ #2}
+
+\newcommand{\blockspacer}{\par\vspace{+0.2\baselineskip}}
+
+\newcommand{\BV}[1]{\text{BV}(#1)}
+\newcommand{\PropsSet}{\Lambda^{\taunf}}
+\newcommand{\ProofsSet}[1]{\mathcal{P}(#1)}

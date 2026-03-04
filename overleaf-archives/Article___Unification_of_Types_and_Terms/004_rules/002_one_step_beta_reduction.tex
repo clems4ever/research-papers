@@ -1,0 +1,59 @@
+\betareduction is equivalent to the operation of applying a function to a variable in order to produce its returned value in standard programming. In \lambdacalc, a function is an abstraction and the application of a function to a variable corresponds to an application in $\LambdaTau$ where the left term is a an abstraction and the right term is any term. Such kind of expression represents the application of the function \textit{before execution}. This expression is different than the expression representing the outcome \textit{after execution} in \lambdacalc.
+Mathematically speaking, it is a process that decreases the length of the expression by removing the abstraction and keeping only the body of the abstraction where the abstraction variable has been substituted by the variable to apply the function to.
+
+\begin{definition}
+    A term of the form $(\tabs x:T.M)N$ or $(\uabs X.M)N$ is called a \textit{\betaredex}, standing for, \betareducible expression.
+\end{definition}
+
+\begin{definition}
+    We call \textit{substitution} of $x$ by $N$ in $A$ the process of replacing all the occurrences of $x$ by $N$ in $A$. This substitution operation is written $A[x := N]$.
+\end{definition}
+
+We see from the definition that both kind of redexes reduce to the same value. The difference between both is that in the untyped redex, there is no constraint on the value to apply the abstraction to unlike typed redex where the type of the variable must be respected. This translates into the following formal definition of \ostepbetareduction.
+
+\begin{reusable}{definition}{definitionBetaReduction}[ \ostepbetareduction $\stobeta$]
+\begin{itemize}
+    \item $(\uabs x.A)N \stobeta A[x := N]$.
+    \item $M \alphaeq N \Longrightarrow (\tabs x:M.A)N \stobeta A[x := N]$.
+    \item $\stobeta$ is compatible.
+\end{itemize}
+\end{reusable}
+
+\begin{definition}
+    We say that any $M$ is \ostepbetareducible if there is a $N$ such that $M \stobeta N$. We equivalently say that $M$ \betareduces to $N$.
+\end{definition}
+
+This notion of \ostepbetareduction extends the notion of one-step \betareduction of pure \lambdacalc with the types intertwined with the terms. Both notions are merged into one instead of having a dedicated treatment. In fact, in dependent types, the expression of a type with $\to$, $\Pi$ or $\Sigma$ notation can somehow be expressed as standard \lambdaterms and the notion of return type can be interpreted as the kind of expression that remains after applying \msteptaureduction which we shall define a bit later. Here are some example of \betareductions.
+
+
+\begin{examples}
+\[
+\begin{tabular}{ll}
+    & $(\tabs x:a.x) a \stobeta a$ \\
+    & $(\tabs x:a.x) ((\tabs y:a.y) a) \stobeta a$ \\
+    & $(\tabs x:a.b) a \stobeta b$ \\
+    & $(\tabs x:{(\tabs y:a.y)}.x) (\tabs y:a.y) \stobeta \lambda y:a.y$ \\
+    & $(\tabs x:{(\tabs y:a.y).x)} (\tabs z:a.z) \stobeta \tabs z:a.z$ \\
+    & $(\tabs x:{(a b)}.x) (a b) \stobeta (a b)$ \\
+    & $(\tabs x:a.x)b$ is not \betareducible because $a \not\alphaeq b$ and is not $a \ne *$. \\
+\end{tabular}
+\]
+\end{examples}
+
+In the following, we build some lemmas around this new \osteptaureduction definition.
+
+\begin{lemma}
+    If $(\tabs x:M.A)N$ is \osteptaureducible then $(\tabs x:N.A)M$ is also \osteptaureducible.
+\end{lemma}
+
+\begin{proof}
+    We are clearly in the case of typed reduction and since \alphaequivalence is symmetric we can conclude that if $(\tabs x:M.A)N$ is \osteptaureducible, then $M \alphaeq N$ and $N \alphaeq M$ by symmetry. Then, we can take $x$ and $A$ and build the expression $(\tabs x:N.A)M$ which \osteptaureduces to $A[x:=M]$. It is actually true for any other value than $x$ and $A$ in the conclusion.
+\end{proof}
+
+\begin{reusableWithProof}{lemma}{theoremSingleTauPreservedUnderAlphaEq}
+    If $M \stotau N$ and $M \alphaeq M'$ then there exists an $N'$ such that $M' \stobeta N'$ and $N \alphaeq N'$.
+\end{reusableWithProof}
+
+\begin{reusableWithProof}{lemma}{singleTauReducesToAllAlphaEquivalentExpressions}
+    If $M \stotau N$ then there exist an $M'$ and $N'$ such that $M' \stobeta N'$ with $M \alphaeq M'$ and $N \alphaeq N'$.
+\end{reusableWithProof}

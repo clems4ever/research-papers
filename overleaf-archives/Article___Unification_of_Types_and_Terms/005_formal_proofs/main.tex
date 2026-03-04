@@ -1,0 +1,21 @@
+As already mentioned, the system created in this paper derives from Dependent Types but somehow inherits some of its properties. More particularly, if we interpret mathematical propositions as types and proofs as terms, we can use this new language to prove theories. Again, the main difference between Dependent Types and $\LambdaTau$ is that the latter uses the same language for both terms and types. This has the compelling property of being able to combine terms and types in various ways to create new elements that can be either proofs or propositions. This creates a web of expressions that interconnects through the operation of mathematical deduction. In particular, in $\LambdaTau$, a proposition is any \lambdatauterm in \taunormalform and a proof of this proposition is any \lambdatauterm that has some bound variables and that \taureduces to the expression of the proposition.
+
+\begin{reusable}{definition}{definitionProposition}
+    A  \textit{proposition} is any $M \in \LambdaTau$ such that $M$ is a $\taunf$.
+\end{reusable}
+
+\begin{reusable}{definition}{definitionPropositionSet}
+    The set of all propositions is denoted $\PropsSet$.
+\end{reusable}
+
+\begin{reusable}{definition}{definitionProof}
+    A  \textit{proof} of a proposition $P$ is any $M \in \LambdaTau$ such that $M \totau P$ and $M \not\alphaeq P$.
+\end{reusable}
+
+\begin{reusable}{definition}{definitionProofsSet}
+    The set of all proofs of a proposition $M$ is denoted $\ProofsSet{M}$.
+\end{reusable}
+
+\begin{reusable}{lemma}{lemmaPropositionHasBoundVariables}
+    A proposition has no bound variables.
+\end{reusable}

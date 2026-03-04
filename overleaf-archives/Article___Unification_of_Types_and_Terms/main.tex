@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{xspace}
+\usepackage{needspace, etoolbox}
+\usepackage{mdframed}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{thm-restate}
+% Capitalize first letter of a word
+\usepackage{mfirstuc}
+% Use to import files with relative path.
+\usepackage{currfile}
+\usepackage{mathpartir}
+
+\input{000_headers/macros}
+\input{000_headers/commands}
+
+\title{Towards unification of types and\\terms in lambda calculus}
+\author{
+    Clément Michaud \\  
+    \small Independent Researcher in AI\\ 
+    \small \texttt{clement.michaud34@gmail.com}
+}
+\date{February 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+    \begin{minipage}{0.9\textwidth}
+        \small
+        \textbf{Abstract.} In this paper, I introduce an extension of simply typed lambda calculus where the types in the expression are themselves considered as \lambdaterms and prove that this new language is weakly normalizing.
+    \end{minipage}
+\end{center}
+
+\vspace{10pt}
+
+\section{Introduction}
+
+\input{001_introduction/main}
+
+\section{Recap of \lambdacalc}
+
+\input{002_recap/main}
+
+\section{Definition of \safelambdatau}
+
+\input{003_language/main}
+
+\section{Rules of \safelambdatau}
+
+\input{004_rules/main}
+
+\section{Formal Proofs}
+
+\input{005_formal_proofs/main}
+
+\clearpage
+
+\input{bibliography}
+
+\clearpage
+
+\input{appendix/main}
+
+\end{document}

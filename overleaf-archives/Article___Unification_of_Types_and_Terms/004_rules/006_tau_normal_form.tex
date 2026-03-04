@@ -1,0 +1,122 @@
+The process of \betareduction is somehow like calculating in arithmetic:
+\[
+    (3 + 4) \times (4 - 2) + 1 \quad\to\quad 7 \times (4 - 2) + 1 \quad\to\quad 7 \times 2 + 1 \quad\to\quad 14 + 1 \quad\to\quad 15
+\]
+Note that one could have also done it in a different order, that is:
+\[
+    (3 + 4) \times (4 - 2) + 1 \quad\to\quad 7 \times 2 + 1 \quad\to\quad 7 \times (4 - 2) + 1 \quad\to\quad 14 + 1 \quad\to\quad 15
+\]
+However, either way, both calculations give the same result, the normal form of $15$. Obviously every expression above is equivalent to $15$ but we usually refer to $15$ because its syntax is less verbose.
+
+With \taureduction, we also introduce some kind of calculation where we eliminate the bound variables in the body of an expression until there is no more to eliminate.
+
+\begin{reusable}{definition}{definitionTauRedex}
+    An expression $M$ is a \tauredex if either:
+    \begin{itemize}
+        \item $M$ is a \betaredex.
+        \item $\text{BV}(M) \ne \emptyset$
+    \end{itemize}
+\end{reusable}
+
+\begin{reusable}{definition}{definitionTauNormalForm}
+    We say that $M$ is a \taunormalform, equivalently written $\taunf$, if $M$ does not contain any \tauredex, that is, if $M$ cannot be reduced any further. We also say that $M$ is in $\taunf$.
+\end{reusable}
+
+\begin{reusable}{definition}{definitionTauHasNormalForm}
+    We say that $M$ has a $\taunf$ if there is an $N$ in \taunormalform such that $M \taueq N$.
+\end{reusable}
+
+Obviously, if a $M$ is in $\taunf$ and reduces to $N$ then $N$ is necessarily \alphaequivalent to $M$.
+
+\begin{reusableWithProof}{lemma}{lemmaTauReductionOfTauNfImpliesAlphaEqWithContractum}
+    If $M$ is in $\taunf$ and $M \totau N$, then we have $M \alphaeq N$.
+\end{reusableWithProof}
+
+\begin{reusable}{lemma}{lemmaThereExistTermsWithNoNormalForm}
+    In $\LambdaTau$, there are terms that do not have a \taunormalform.
+\end{reusable}
+
+\begin{proof}
+     $\LambdaTau$ is an extension of pure \lambdacalc, that is, $\Lambda \subseteq \LambdaTau$ and therefore all expressions in pure \lambdacalc are valid in $\LambdaTau$. The fixed point theorem proven by Haskell and Curry made them build the Y combinator term that is defined as follows: For any $L$, $Y:=(\lambda x.L(xx))(\lambda x.L(xx))$. This expression \betareduces to itself. Since \betareduction implies \taureduction, it \taureduces to itself and still contains a \tauredex. Hence, it never ends up in a state where it has no \tauredex. We conclude that it has no \taunormalform.
+\end{proof}
+
+\begin{reusable}{definition}{definitionFiniteReductionPath}
+    A \emph{finite reduction path} from \(M\) is a finite sequence of terms $N_0, N_1, N_2, \ldots, N_n$ such that \(N_0 \alphaeq M\) and \(N_i \totau N_{i+1}\) for each \(i\) with \(0 \le i < n\).
+\end{reusable}
+
+\begin{reusable}{definition}{definitionInfiniteReductionPath}
+    An \emph{infinite reduction path} from \(M\) is an infinite sequence $N_0, N_1, N_2, \ldots$ with \(N_0 \alphaeq M\) and \(N_i \totau N_{i+1}\) for all \(i \in \mathbb{N}\).
+\end{reusable}
+
+\begin{reusable}{definition}{definitionNormalisation}[ weak and strong normalisation ]
+    \begin{enumerate}
+        \item \( M \) is \textit{weakly normalising} if there exists an \( N \) in \taunormalform such that \( M \totau N \).
+        \item \( M \) is \textit{strongly normalising} if there are no infinite reduction paths starting from \( M \).
+    \end{enumerate}
+\end{reusable}
+
+At this stage we want to prove that $\LambdaTau$ has the diamond property, that is, if $M \totau N_{1}$ and $M \totau N_{2}$, then there exists $N_{1} \totau N$ and $N_{2} \totau N$. However, to prove that proposition more easily we shall introduce the concept of parallel \taureduction to avoid messy commutation proofs.
+
+\begin{reusable}{definition}{definitionParallelTauReduction}[ parallel \taureduction]
+    \begin{align}
+        a \in \mathbb{V} & \vdash a \toptau a \\
+        A \toptau A' \land N \toptau N' & \vdash (\lambda x.A)N \toptau A'[x := N'] \\
+        A \toptau A' \land N \toptau N' \land M \toptau M' \land M' \alphaeq N' & \vdash (\lambda x \oftype M.A)N \toptau A'[x := N'] \\
+        M \toptau M' \land N \toptau N' & \vdash \lambda x \oftype M.N \toptau \lambda x \oftype M'.N'[x := M'] \\
+        M \toptau M' & \vdash  \lambda x.M \toptau \lambda x.M' \\
+        M \toptau M' \land N \toptau N' & \vdash \lambda x \oftype M.N \toptau \lambda x \oftype M'.N' \\
+        M \toptau M' \land N \toptau N' & \vdash MN \toptau M'N'
+    \end{align}
+\end{reusable}
+
+\begin{reusable}{theorem}{theoremDiamondPropertyParallel}
+    If $M \toptau N_{1}\text{ and }M \toptau N_{2}$, then there exists a $N$ such that: $N_{1} \toptau N \text{ and }N_{2} \toptau N$.
+\end{reusable}
+
+\begin{proof}
+We prove the property by structural induction on the parallel \taureduction rules.
+
+\paragraph{Base Case}
+Suppose $M$ is a variable $x$. By applying the base rule we have $x \toptau x$ and necessarily $N_1=N_2=x$. If we take $N=x$, we have $N_1 \toptau N$ and $N_2 \toptau N$.
+
+\paragraph{Inductive Case: Untyped abstraction compatibility}
+Suppose $M=\lambda x.N$. If $M \toptau M_1$ and $M \toptau M_2$, then there exists $N_1$ and $N_2$ such that $M_1=\lambda x.N_1$ and $M_2=\lambda x.N_2$. However, by the induction hypothesis, we know that there is a $P'$ such that $N_1 \toptau P'$ and $N_2 \toptau P'$. We apply the untyped abstraction compatibility rule and we get $M_1=\lambda x.N_1 \toptau \lambda x.P'$ and $M_2=\lambda x.N_2 \toptau \lambda x.P'$. We conclude that $\lambda x.P'$ is our $N$ and therefore $M_1 \toptau N$ and $M_2 \toptau N$.
+
+\paragraph{Inductive Case: Typed abstraction compatibility}
+There are two cases: either the variable of the abstraction is in the bound variables of the body or it is not. Let's start with the case where it is not.
+
+\subparagraph{Variable not in Bound Variables}
+Suppose $M=\lambda x \oftype T.N$. If $M \toptau M_1$ and $M \toptau M_2$, then there exists $N_1, T_1, N_2, T_2$ such that $M_1:=\lambda x \oftype T_1.N_1$ and $M_2:=\lambda x \oftype T_2.N_2$ with $T \toptau T_1$ and $T \toptau T_2$. However, by the induction hypothesis, we know that there is a $P'$ such that $N_1 \toptau P'$ and $N_2 \toptau P'$ and a $T'$ such that $T_1 \toptau T'$ and $T_2 \toptau T'$. We apply the typed abstraction body (rule 6). rule and we get $M_1=\lambda x \oftype T_1.N_1 \toptau \lambda x \oftype T'.P'$ and $M_2=\lambda x \oftype T_2.N_2 \toptau \lambda x \oftype T'.P'$. We conclude that $\lambda x \oftype T'.P'$ is our $N$ and therefore $M_1 \toptau N$ and $M_2 \toptau N$.
+
+\subparagraph{Variable in Bound Variables}
+    Suppose $M=\lambda x \oftype T.N[x := T]$. If $M \toptau M_1$ and $M \toptau M_2$, then there exists $T_1', N_1', T_2', N_2'$ such that:
+
+    \[
+    \begin{array}{l}
+        M_1:=\lambda x \oftype T_1'.N_1'[x := T_1'] \\
+        M_2:=\lambda x \oftype T_2'.N_2'[x := T_2'] \\
+        T \toptau T_1' \text{ and } T \toptau T_2' \\
+        x \in \BV{N_1'} \text{ and } x \in \BV{N_2'}
+    \end{array}
+    \]
+    
+    By the induction hypothesis we know that there exist $T'$ and $N'$ such that:
+    \[
+    \begin{array}{l}
+        T_1' \toptau T' \\
+        T_2' \toptau T' \\
+        N_1' \toptau N' \\
+        N_2' \toptau N'
+    \end{array}
+    \]
+    
+    We apply the rule 4 on $T_1', N_1'$ because $T_1' \toptau T'$, $N_2' \toptau N'$ and $x \in \BV{N_1'}$. We deduce $\lambda x \oftype T_1'.N_1' \toptau \lambda x \oftype T_1'.N_1'[x := T_1']$. The same applies with $T_2'$ and $N_2'$ and we therefore also deduce $\lambda x \oftype T_2'.N_2' \toptau \lambda x \oftype T_2'.N_2'[x := T_2']$. Those two results means that
+
+\paragraph{Inductive Case: Application compatibility}
+    
+\end{proof}
+
+\begin{reusable}{theorem}{theoremConfluence}[Confluence theorem]\\
+Let $M, N_1, N_2$ such that $\quad M \totau N_{1} \quad\text{and}\quad M \totau N_{2}$.\\
+Then there is a $N$ such that: $N_{1} \totau N \quad\text{and}\quad N_{2} \totau N$.
+\end{reusable}

@@ -1,0 +1,30 @@
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\Rs}{\ \R\ }
+\newcommand{\rcompatible}{$\R$-compatible\xspace}
+\newcommand{\rcompatibility}{$\R$-compatibility\xspace}
+
+We start by defining the rules of compatibility with respect to a binary relation $\R$ on $\LambdaTau$ in order to facilitate the definition of the relations that will follow. This definition is borrowed from Barendregt\cite{barendregt1984}. Compatibility rules ensure that if a relation is true for all sub-terms of two terms it is also true for those two terms.
+
+\begin{reusable}{definition}{definitionCompatibility}
+A binary relation $\R$ on $\LambdaTau$ is compatible with the structure of $\LambdaTau$ if:
+
+\begin{itemize}
+    \raggedright
+    \item $M\ \R\ N \implies (\app M L)\ \R\ (\app N L)$
+    \item $M\ \R\ N \implies (\app L M)\ \R\ (\app L N)$
+    \item $M\ \R\ N \implies (\uabs X.M)\ \R\ (\uabs X.N)$
+    \item $M\ \R\ N \implies (\tabs x:T.M)\ \R\ (\tabs x:T.N)$
+    \item $M\ \R\ N \implies (\tabs x:M.B)\ \R\ (\tabs x:N.B)$
+\end{itemize}
+\end{reusable}
+
+\begin{reusable}{lemma}{lemmaTransitiveCompatibility}
+    If $\R$ is a compatible and transitive binary relation, then:
+    \[
+        M_1\ \R\ M_2 \quad\land\quad N_1\ \R\ N_2 \quad\Longrightarrow\quad (\app {M_1} {N_1}) \Rs (\app {M_2} {N_2})
+    \]
+\end{reusable}
+
+\begin{proof}
+    We apply the first compatibility rule from the premise $M_1 \Rs M_2$ with $L=N_1$, we deduce $(\app {M_1} {N_1}) \Rs (\app {M_2} {N_1})$. We apply the second rule from premise $N_1 \Rs N_2$ and $L=M_2$ and we get $(\app {M_2} {N_1}) \Rs (\app {M_2} {N_2})$. Since $\R$ is transitive we can conclude from previous results that $(\app {M_1} {N_1}) \Rs (\app {M_2} {N_2})$.
+\end{proof}

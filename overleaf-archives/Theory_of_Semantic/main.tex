@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{xspace}
+\usepackage{needspace, etoolbox}
+\usepackage{url}
+\usepackage{mdframed}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{thm-restate}
+
+
+% Theorem environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\title{Theory of Coherence}
+\author{
+Clément Michaud \\
+Independent Researcher\\
+\texttt{clement.michaud34@gmail.com}
+}
+\date{May 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\begin{minipage}{0.9\textwidth}
+\small
+\textbf{Abstract.} We propose a foundational framework for mathematics based on symbolic coherence rather than logical primitives. Traditional mathematical foundations assume certain constructs (logical connectives, quantifiers, equality) as given, while treating mathematical objects as variables. We argue that all symbols—including logical apparatus—should be treated uniformly as structural entities subject to coherence constraints. Mathematical structure emerges from two fundamental principles: identity coherence (consistent use of symbols) and structural coherence (compatibility of graph patterns). We develop a graph-based representation where mathematical expressions become spatial structures, and operations reduce to pattern matching and graph rewriting. This approach unifies logic and mathematics under a single primitive framework, suggesting that categorical and type-theoretic structures are emergent rather than foundational.
+\end{minipage}
+\end{center}
+
+\vspace{10pt}
+
+
+\section{Introduction}
+
+Mathematical language is often viewed as inherently unambiguous and precise. However, much of its structure and semantics relies on shared but implicit assumptions. In this work, we take the radical stance that all mathematical meaning arises from structured pattern matching over atomic symbols. Inspired by ideas from type theory, category theory, and formal language theory, we present a system where the only primitive notion is that of a \emph{symbol}.
+
+\section{Symbols and Sentences}
+
+\subsection{The Symbol Set \texorpdfstring{$\Gamma$}{Gamma}}
+
+Let $\Gamma$ be an infinite set of atomic \emph{symbols}. Each symbol $s \in \Gamma$ represents an indivisible token—there is no internal structure to a symbol.
+
+Examples of symbols:
+\[
+\texttt{forall}, \quad \texttt{n}, \quad \in, \quad \mathbb{N}, \quad \texttt{=}, \quad \texttt{,}
+\]
+
+\subsection{Mathematical Sentences as Symbol Sequences}
+
+A \emph{sentence} in our system is a finite sequence of symbols from $\Gamma$:
+\[
+S = [s_1, s_2, \dots, s_n], \quad \text{where each } s_i \in \Gamma
+\]
+
+For example, the mathematical sentence
+\[
+\forall n \in \mathbb{N}, \ n = n
+\]
+would correspond to the symbol sequence:
+\[
+[\texttt{forall}, \texttt{n}, \texttt{\textbackslash in}, \texttt{Nat}, \texttt{,}, \texttt{n}, \texttt{=}, \texttt{n}]
+\]
+
+Note: here we treat parentheses, commas, quantifiers, and operators uniformly as symbols.
+
+\subsection{Vocabulary of a Sentence}
+
+Given a sentence $S = [s_1, \dots, s_n]$, we define its \emph{vocabulary} as:
+\[
+\mathrm{Vocab}(S) = \{ s_i \mid 1 \leq i \leq n \}
+\subseteq \Gamma
+\]
+
+This is the set of all distinct symbols used in the sentence.
+
+\section{Coherence}
+
+[To be developed: define coherence formally—each symbol must refer to a unique role or meaning across all contexts.]
+
+\section{Structure and Semantics}
+
+[To be developed: introduce how structural relations between symbols define meaning—perhaps via types, inference rules, or categorical objects.]
+
+
+
+\end{document}

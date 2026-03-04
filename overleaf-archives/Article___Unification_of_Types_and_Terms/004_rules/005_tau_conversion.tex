@@ -1,0 +1,19 @@
+\begin{reusable}{definition}{definitionTauConversion}
+    $M \taueq N$ if there is an $n \in \mathbb{N}$ such that $n \geq 0$ and there are terms $M_{0}$ to $M_{n}$ such that $M_{0} \alphaeq M$, $M_{n} \alphaeq N$ and $\forall i \in \mathbb{N}$ such that $0 \leq i < n$:
+\[
+\textit{Either}\quad M_{i} \stotau M_{i+1}\quad\textit{ or }\quad M_{i+1} \stotau M_{i}
+\]
+\end{reusable}
+
+\begin{reusable}{lemma}{lemmaTauEqExtendsTauReduction}
+    $\taueq$ extends $\totau$ in both directions, or in other words, if $M \totau N$ or $N \totau M$ then $M \taueq N$.
+\end{reusable}
+
+\begin{proof}
+If $M \totau N$, then all $\tau$-steps are in the direction $M_{i} \stotau M_{i+1}$ in the definition of \tauequivalence. In that case $M \taueq N$.\\
+If $N \totau M$, then all steps are in the other direction in the definition of \tauequivalence and $M \taueq N$ still holds.
+\end{proof}
+
+\begin{reusableWithProof}{theorem}{theoremTauEqIsAnEquivalenceRelation}
+    The relation $\taueq$ is an equivalence relation, i.e., it is reflexive, symmetric and transitive.
+\end{reusableWithProof}

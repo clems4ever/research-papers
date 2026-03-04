@@ -1,0 +1,52 @@
+\section{Rules}
+
+\newcommand{\universe}{\mathcal{U}}
+\newcommand{\type}{\ \mathrm{type}}
+\def\judg#1:#2{#1 \oftype #2}
+
+
+\[
+\begin{array}{l}
+    \inferrule*[right=\text{inl-intro}]{
+        \Gamma \vdash A, B \type}{
+        \Gamma \vdash \mathrm{inl}(A, B) \oftype A \mid B} \\
+    \\
+    \inferrule*[right=\text{inr-intro}]{
+        \Gamma \vdash A, B \type}{
+        \Gamma \vdash \mathrm{inr}(A, B) \oftype A \mid B} \\
+    \\
+    \inferrule*[right=\text{inl-elim}]{
+        \Gamma \vdash A, B \type \quad \Gamma \vdash x = \mathrm{inl}(A, B)}{
+        \Gamma \vdash \mathrm{unpack}(x) \oftype A} \\
+    \\
+    \inferrule*[right=\text{inr-elim}]{
+        \Gamma \vdash A, B \type \quad \Gamma \vdash x = \mathrm{inr}(A, B)}{
+        \Gamma \vdash \mathrm{unpack}(x) \oftype B} \\
+    \\
+    \inferrule*[right=\text{pair-intro}]{
+        \Gamma \vdash A, B \type}{
+        \Gamma \vdash \mathrm{pair(A, B)} : A \times B} \\
+    \\
+    \inferrule*[right=\text{$\pi_1$-elim}]{
+        \Gamma \vdash A, B \type}{
+        \Gamma \vdash \pi_1(\mathrm{pair(A, B)}) \oftype A} \\
+    \\
+    \inferrule*[right=\text{$\pi_2$-elim}]{
+        \Gamma \vdash A, B \type}{
+        \Gamma \vdash \pi_2(\mathrm{pair(A, B)}) \oftype B} \\
+    \\
+    \inferrule*[right=\text{lambda-intro}]{
+        \Gamma \vdash A, B \type \quad \Gamma, x:A \vdash M:B}{
+        \Gamma \vdash \lambda x:A.M \oftype \Pi x:A.B
+    } \\
+    \\
+    \inferrule*[right=\text{lambda-elim}]{
+        \Gamma \vdash A, B \type \quad \Gamma \vdash M:\Pi x:A.B \quad \Gamma \vdash N:A}{
+        MN \oftype B[x := N]
+    }\\
+\end{array}
+\]
+
+Elimination rules are explicative and introduction rules are used to create hypothetical proofs of an existing type or a new type.
+
+anytime algorithms

@@ -1,0 +1,103 @@
+\section{Context of research}
+
+This paper is an attempt to formalize a model for AGI based on a confluent theory based on a mix of $\lambda$-calculus, typed $\lambda$-calculus, dependent types, proof theory but also from philosophical and experimental observations about living beings.
+
+\subsection{Pre-requisites}
+
+If we take the perspective of the brain being a computation device and more particularly the neo-cortex, it certainly must hold that there are 3 important categories of neurons to study: sensor and motor neurons and the others. There are two views on semantic meaning of the world: the model-theoretic meaning which states that there exist some kind of perfect representation of the world that all beings partially share in the way they compute things. This means that if $O$ is part of the world that is observed by two creatures, they should certainly end up with the same model for $O$. This is the view taken by most leading AI projects lately. They try to make their AI converge to the same model of the world by somehow stipulating that there exists a perfect curve $C$ that can be approached as close as possible by providing samples. It resembles some kind of logistic regression but in very high dimensional non-linear space.\\
+\\
+The second view is the experience grounded semantic which stipulates that the model of the world in each individual is very dependent on the sensory inputs they received. This means that the model of $O$ for two creatures who lived different experiences can be very different as long as those models explain what they have observed so far. Even if those agents have lived the same observations, their model of the world can theoretically be very different because there is always an infinity of ways to explain some observations.\\
+\\
+In this paper, I chose to take the second view as hypothesis because philosophically, there is no reason that an agent have any way to measure how far it is from the perfect model of the world because it is simply not accessible to anybody. That's why we do fundamental research with the part of the universe we get to observe. Can we assume that we know what would be the Truth billions light years from here? This means in my opinion that we should take observations as evidence of what is produced by the Truth and \textbf{only that} can be taken as evidence. From there, the living being can try to hypothesize the model that explains those irrefutable evidences and I feel like this is a task that is only worthy of reasoning rather than curve fitting. More precisely, I consider reasoning as a generalization of computation. Hence, this paper focuses on formal proof systems and in this specific case, the reverse, hypothesizing based irrefutable evidences. Fundamentally, those evidences gives the structure of the model that would not exist otherwise.
+
+\section{Language}
+
+\subsection{$\lambda^\lambda$}
+
+Expressions in the lambda calculus are called \(\lambda\)-terms. The following inductive definition establishes how the set \(\Lambda\) of all \(\lambda\)-terms is constructed. To start with, we assume the existence of an infinite set \(\mathbb{V}\) of so-called variables:
+\[
+\mathbb{V} = \{ x, y, z, \dots \}
+\]
+\begin{definition}
+The set \(\Lambda\) of all \(\lambda\)-terms) are defined as:
+\begin{enumerate}
+    \item \textbf{(Variable)} If \(u \in \mathbb{V}\) then \(u \in \Lambda\).
+    \item \textbf{(Application)} If \(M, N \in \Lambda\) then \((MN) \in \Lambda\).
+    \item \textbf{(Abstraction)} If \(u \in \mathbb{V}\) and \(T, M \in \Lambda\), then \((\lambda u : T .\, M) \in \Lambda\).
+    \item \textbf{(Any Abstraction)} If \(u \in \mathbb{V}\) and \(M \in \Lambda\), then \((\lambda u .\, M) \in \Lambda\).
+\end{enumerate}
+\end{definition}
+
+\medskip
+
+\noindent The grammar looks like this
+\[
+\mathbb{E} = \mathbb{V} \mid \mathbb{E}\ \mathbb{E} \mid \lambda \mathbb{V}.\mathbb{E} \mid \lambda \mathbb{V}\colon\mathbb{E}.\mathbb{E} \mid (\mathbb{E})
+\]
+This language respects the definition of $\alpha$-conversion and $\beta$-reduction naturally extended to the any abstraction rule.
+
+\subsection{Free Variables as irrefutable proofs of themselves}
+
+Since sensory information are assumed to be the only available information the brain can act on, they are treated specifically here. Any free variable that enters the system through the sensory layer represents its own proof. In type theory, we would say that a variable $a$ is the only inhabitant of the type $a$ it represents.
+
+\subsection{Divergence from types}
+
+In the dependent type, there are two distinct concepts that forms the theory: the \lcalc and the type calculus or $\Pi$-calculus and $\Sigma$-calculus. However, I argue that there is no reason to consider the type of a \lterm differently than the expression it represents. Therefore, in what follows, the notion of type is abandoned in favor of a new condition for applying abstraction based on the fact that we use the formalism of proposition as types and proofs as terms. If we collapse the set of proofs of a given expression with the set of all elements it represents then proofs and propositions are both \lterms that transform into each other, more formally if the term $p$ is an element of the term $P$, then there exists a term $F_{x}$ compatible with $x$ such that $F_{x}x=_{\beta} P$.\\
+\\
+However, one interesting idea from typed \lcalc was the use of the typing rules, that specifies which expressions are legal or compatible and which are not. For example, if $a$ is a variable, one could ask what should be the type of $aa$. Provided that free variables represent their own type $a$ is of type $a$ which is not an abstraction, and therefore the application $aa$ must certainly be illegal.
+
+\begin{definition}
+(One-step $\sigma$-reduction)
+\[
+\begin{array}{ll}
+     (Basis) & \lambda x:A.M \to_{\sigma} \lambda x:A.[A/x]M \\
+     \\
+     (Compatibility) & \begin{aligned}
+        & M \to_{\sigma} N \vdash ML \to_{\sigma} NL, \\
+        & M \to_{\sigma} N \vdash LM \to_{\sigma} LN, \\
+        & M \to_{\sigma} N \vdash \lambda x:M.L \to_{\sigma} \lambda x:N.L, \\
+        & M \to_{\sigma} N \vdash \lambda x:L.M \to_{\sigma} \lambda x:L.N, \\
+        & M \to_{\sigma} N \vdash \lambda X.M \to_{\sigma} \lambda X.N
+     \end{aligned}
+\end{array}
+\]
+\end{definition}
+
+\subsubsection{Problems}
+
+Is the following expression legal?
+
+\[
+(\lambda x:(\lambda y:a.y).x)\ a
+\]
+
+If we use the types nomenclature, the representation of this function can be built as follows
+
+\[
+\begin{array}{ll}
+     & \lambda y:a.y\text{ is of type }a \to a\\
+     & \lambda x:X.x\text{ is of type }X \to X\\
+     & \lambda x:(\lambda y:a.y).x\text{ is therefore of type }(a \to a) \to (a \to a)\\
+     & \text{the application of this expression and $a$ is therefore not legal}
+\end{array}
+\]
+
+What is the type of 
+
+\[
+(\lambda x:a.\lambda y:a.y)
+\]
+
+It should be
+\[
+a \to (a \to a)
+\]
+and in that case the application to $a$ is legal.
+
+\subsection{Proofs as terms}
+
+There is an interpretation of types being inhabited by terms that relates to the Curry-Howard isomorphism. This interpretation is basically that theorems are types and proofs of the theorems are inhabitants of those types. \\
+\\
+There is also some kind of inter-relation between types and expressions that can make us wonder whether the type of the expression should be considered a different thing than the expression itself. It seems hard to justify a dedicated calculus for types. Indeed a proof of $T$ is itself a \lterm and for all proof $x$ there exists a "compatible" term $P_x$ such that $P_x\ x$ $\beta$-reduces to $T$.\\
+\\
+Obviously, the free variables of a \lterm $M$ must all somehow represent the proofs of themselves because they cannot 

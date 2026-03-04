@@ -1,0 +1,40 @@
+We now extend \osteptaureduction to \msteptaureduction. This extension will help formalize the process of reaching normal forms and define functional equivalence classes.
+
+\begin{reusable}{definition}{multiStepTauReductionDefinition}
+    We say that $M$ \taureduces to $N$ or equivalently $M \totau N$ if there is a $n \in \mathbb{N}$ such that $n \geq 0$ and there are terms $M_{0}$ to $M_{n}$ such that $M_{0} \alphaeq M$, $M_{n} \alphaeq N$ and $\forall i \in \mathbb{N}$ such that $0 \leq i < n$:
+    \[
+    M_{i} \stotau M_{i+1}
+    \]
+\end{reusable}
+
+
+In other words, there is chain of \osteptaureductions starting with $M$ and ending with $N$:
+\[
+M \alphaeq M_{0} \stotau M_{1} \stotau ... \stotau M_{n-1} \stotau M_{n} \alphaeq N
+\]
+
+\begin{lemma}
+    $\totau$ extends $\stotau$. In other words, if $M \stotau N$ then $M \totau N$.
+\end{lemma}
+
+\begin{proof}
+    Suppose that $M \stotau N$. If we take $M_{0}=M$ and $M_{1}=N$, then we know $M=M_{0} \stotau M_{1}=N$. However since equality implies \alphaequivalence , $M \alphaeq M_{0} \stotau M_{1} \alphaeq$ and this is the definition of $M \totau N$.
+\end{proof}
+
+
+\begin{lemma}
+    \taureduction is reflexive.
+\end{lemma}
+
+\begin{proof}
+    Case where $n=0$ in \cref{multiStepTauReductionDefinition}.
+\end{proof}
+
+\begin{lemma}
+    \taureduction is transitive. More formally, for all $M, N, P$, if $M \totau N$ and $N \totau P$ then $M \totau P$.
+\end{lemma}
+
+\begin{proof}
+    Let $M, N, P$ be such that $M \totau N$ and $N \totau P$. Therefore, there exist $n_1$ and $n_2$ such that:
+    $M \alphaeq M_{0} \stotau M_{1} \stotau ... \stotau M_{n_1} \alphaeq N$ and $N \alphaeq N_{0} \stotau N_{1} \stotau ... \stotau N_{n_2} \alphaeq P$. Since $M_{n_1} \alphaeq N_{0}$ by transitivity with $N$, we can rename the variables in $N_{0}$ so that the new term $\tilde{N_{0}}$ is equal to $M_{n_1}$. We can then rename all subsequent terms (terms with a \textasciitilde) until $P$ thanks to \cref{theoremSingleTauPreservedUnderAlphaEq}. Therefore $M \alphaeq M_{0} \stotau M_{1} \stotau ... \stotau M_{n_1-1} \stotau \tilde{N_0} \stotau \tilde{N_{1}} \stotau ... \stotau \tilde{N_{n_2}} \alphaeq P$. Hence, we conclude $M \totau P$.
+\end{proof}

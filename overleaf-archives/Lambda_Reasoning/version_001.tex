@@ -1,0 +1,60 @@
+\section{Version 1}
+
+\subsection{Proposition}
+
+There are three kind of propositions:
+
+\begin{itemize}
+    \item Null
+    \item Unary
+    \item Binary
+\end{itemize}
+
+\subsection{Null Proposition}
+
+This is the void proposition. It does not have a proof.
+
+\subsection{Unary Propositions}
+
+A unary proposition is a proposition that only depends on one variable. In the \lcalc, this correspond to either the identity $\lambda x.x$ or the application of the identity to a term $t$, i.e., $(\lambda x.x)t$.
+
+\subsection{Binary Propositions}
+
+We are most interested in the relations between objects, therefore we introduce binary propositions. That is the set of lambda functions with two parameters.
+
+\begin{align}
+\lambda x\lambda y.xy\\
+\lambda x\lambda y.yx\\
+\lambda x\lambda y.x\\
+\lambda x\lambda y.y
+\end{align}
+
+\subsection{Interpretation}
+
+The domain of a proposition is the set of all elements described by the proposition.
+
+We define a meta proposition $P_{meta}(x, y)="dom(x)=dom(y)"$ has a proof.
+
+It follows that $Q_{meta}(x):=P_{meta}(x, x)="dom(x)=dom(x)"$.
+
+\begin{itemize}
+    \item $dom(Null)=\emptyset$.
+    \item If $P(t)$ is a statement, i.e., a unary prop with t as argument, $dom(P(t)):=\{t\}$ is axiomatically true and therefore is a proof of itself since the token t exists.
+    \item If $P$ is the identity, $dom(P(x))=dom(x)$ by definition of the identity.
+    \item If $P$ is binary proposition with $L$ and $R$ two propositions as arguments of the predicate, $dom(P(L, R))=\{(p, q) \mid p \in dom(L)\ and\ q \in dom(R)\}$
+\end{itemize}
+
+For all binary propositions $P(L, R)$ having a proof, we can form new interesting propositions from them:
+
+\begin{itemize}
+    \item $P1(P, R)=\lambda x.P(x, R)$
+    \item $P2(P, L)=\lambda x.P(L, x)$
+    \item $P3(P)=\lambda y.\lambda x.P(x, y)$ valid only if P is a binary prop.
+    \item $P4(L, R)=\lambda x.x(L, R)$ valid if x is a binary prop with L as left domain and R as right domain.
+    \item $P5(L)=\lambda y.\lambda x.x(L, y)$ valid if x is a binary prop with the domain of L as the left domain, i.e, $P_{meta}(left(x), L)$.
+    \item $P6(R)=\lambda y.\lambda x.x(y, R)$ valid if x is a binary prop with the domain of R as the right domain, i.e., $P_{meta}(right(x), R)$
+\end{itemize}
+
+In the domain of those propositions, we already know some elements because we know for sure that $P(L, R)$ given we have at least a proof for it.
+
+Other propositions might also be interesting as well at some point, but proving something based on something that does not have a direct proof is probably not a good idea at first (optimization).

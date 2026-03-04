@@ -1,0 +1,183 @@
+\section{Version 3}
+
+\subsection{Language}
+
+\subsection{Typed Lambda}
+
+Expressions in the lambda calculus are called \(\lambda\)-terms. The following inductive definition establishes how the set \(\Lambda\) of all \(\lambda\)-terms is constructed. To start with, we assume the existence of an infinite set \(\mathbb{V}\) of so-called variables:
+\[
+\mathbb{V} = \{ x, y, z, \dots \}.
+\]
+
+\medskip
+
+\noindent\textbf{Definition (The set \(\Lambda\) of all \(\lambda\)-terms)}  
+\begin{enumerate}
+    \item \textbf{(Variable)} If \(u \in \mathbb{V}\) then \(u \in \Lambda\).
+    \item \textbf{(Application)} If \(M, N \in \Lambda\) then \((MN) \in \Lambda\).
+    \item \textbf{(Abstraction)} If \(u \in \mathbb{V}\) and \(T, M \in \Lambda\), then \((\lambda u : T .\, M) \in \Lambda\).
+    \item \textbf{(Any Abstraction)} If \(u \in \mathbb{V}\) and \(M \in \Lambda\), then \((\lambda u .\, M) \in \Lambda\).
+\end{enumerate}
+\medskip
+
+\noindent The grammar looks like this:
+\[
+\mathbb{E} = \mathbb{V} \mid \mathbb{E}\ \mathbb{E} \mid \lambda \mathbb{V}.\mathbb{E} \mid \lambda \mathbb{V}\colon\mathbb{E}.\mathbb{E} \mid (\mathbb{E})
+\]
+
+\noindent This language respects the definition of $\alpha$-conversion and $\beta$-reduction naturally extended to the any abstraction rule.\\
+
+\noindent \textbf{Definition (Typable term)} \quad A term \( M \) is called typable if there is a type \(\sigma\) $\in$ $\Lambda$ such that $M : \sigma$.\\
+
+\noindent \textbf{Definition} \quad \textit{(Derivation of typing rules for \(\lambda prop\))}
+\[
+\begin{array}{ll}
+    (\text{var}) & \displaystyle{\Gamma \vdash x : \sigma \quad \text{if } x : \sigma \in \Gamma} \\[2.5ex]
+    (\text{appl}) & \displaystyle\frac{\Gamma \vdash M : \lambda x: \sigma.\tau \quad \Gamma \vdash N : \sigma}{\Gamma \vdash MN : \tau} \\[2.5ex]
+    (\text{abst}) & \displaystyle\frac{\Gamma, x : \sigma \vdash M : \tau}{\Gamma \vdash \lambda x : \sigma. M : \lambda x \colon \sigma.\tau} \\[2.5ex]
+    (\text{any-abst}) & \displaystyle\frac{\Gamma \vdash M : \tau}{\Gamma \vdash \lambda x . M : \lambda x.\tau} \\[2.5ex]
+    (\text{witness-eq}) & \displaystyle\frac{\Gamma \vdash M : A \quad A=_{\beta}B}{\Gamma \vdash M : B} \\[2.5ex]
+\end{array}
+\]
+
+\subsubsection{Proofs of P (unsure)}
+
+The proofs of $P$ are typed \lterms that when going through an algorithm $F$ (which can also be encoded as a \lterm, gives back a term of type $P$. We can represent the proofs of a proposition $P$ as
+\[
+    \{p \mid p \in \Lambda, \forall x \in P,p\ x=_{\beta} P\}
+\]
+or
+\[
+    \lambda F.\lambda x:P.F\ x =_{\beta} \lambda F.\lambda x:P.P\text{ where $F$ is correctly typed}
+\]
+\\
+\textbf{Introduction} is the process of transforming an expression with less abstractions than type $P$ into an expression of type $P$.
+\textbf{Elimination} is the process of transforming an expression with more abstractions than type $P$ into an expression of type $P$.
+
+\subsubsection{Functor and function types}
+
+\[
+\begin{array}{ll}
+    (\text{function}) & (\lambda x:A.x) a =_{\beta} a \text{ if } a:A \\
+    (\text{functor}) & (\lambda x:A.A) a =_{\beta} A \text{ if } a:A
+\end{array}
+\]
+
+Those two do not reduce to each other, which is good because one represents the function mapping one proof $a$ of $A$ into itself (identity of proofs of $A$) and in the other case, it represents a function that maps one proof $a$ of $A$ to the proposition $A$ containing all the proofs of $A$.
+
+\subsubsection{Type A $\times$ B}
+
+Here is the definition of the type $A \land B$:
+
+\[
+    A \times B := \lambda C.\lambda a:A.\lambda b:B.C
+\]
+
+\noindent and here are some proofs for it.
+
+\[
+\begin{array}{ll}
+    \pi := \lambda f:(\lambda X.\lambda x:A.\lambda y:B.X).\lambda C.\lambda a:A.\lambda b:B.f\ C\ a\ b\\
+\end{array}
+\]
+
+\noindent And the elimination of $A \times B$ is:
+
+\[
+\begin{array}{ll}
+    \lambda C.\lambda x:A \times B.\lambda f:(\lambda a:A.\lambda b:B.C).\lambda a:A.\lambda b:B.x\ A\ a\ b \\
+    \lambda C.\lambda x:A \times B.\lambda f:(\lambda a:A.\lambda b:B.C).\lambda a:A.\lambda b:B.x\ B\ a\ b
+\end{array}
+\]
+
+
+
+\subsubsection{A + B}
+
+Here is the definition of the type $A \lor B$:
+
+\[
+    A + B := \lambda C.\lambda f:(\lambda a:A.C).\lambda g:(\lambda b:B.C).C
+\]
+
+\noindent Here are some proofs of it:
+
+\[
+\begin{array}{ll}
+    left := \lambda x:A.(\lambda C.\lambda f:(\lambda a:A.C).\lambda g:(\lambda b: B.C).f\ x) \\
+    right := \lambda y:B.(\lambda C.\lambda f:(\lambda a:A.C).\lambda g:(\lambda b: B.C).g\ y)
+\end{array}
+\]
+
+\noindent And the elimination of $A + B$ is:
+
+\[
+    \lambda C.\lambda x:A \lor B.\lambda f:(\lambda a:A.C).\lambda g:(\lambda b: B.C).x\ C\ f\ g
+\]
+
+\noindent which returns an element of type $C$.
+
+\subsubsection{Booleans}
+
+Here is the definition of the type $Bool$:
+
+\[
+    Bool := \lambda A.\lambda a:A.\lambda b:A.A \\
+\]
+
+\noindent Here are some proofs of it:
+
+\[
+\begin{array}{ll}
+    \text{(True)} & \lambda A.\lambda then:A.\lambda else:A.then \\
+    \text{(False)} & \lambda A.\lambda then:A.\lambda else:A.else \\
+\end{array}
+\]
+
+\subsection{Singular Encodings}
+
+\subsection{Interpretation}
+
+We define the notation as follows:
+\[
+x : P\quad \text{means}\quad \{\,x \mid P(x)\ \text{holds (since \(x\) is a proof of it)}\,\}
+\]
+\[
+x : \overline{P}\quad \text{means}\quad \{\,x \mid P(x)\ \text{does not hold (since \(x\) is a proof of it)}\,\}
+\]
+
+Here, \(U\) denotes the universe of all propositions.
+Below are a few interesting propositions:
+
+\begin{equation}
+    \lambda a : A. \,a
+\end{equation}
+\textbf{(Identity)}  
+This is the identity function. It represents all the witnesses for the proposition A.
+
+\begin{equation}
+    ProjL=\lambda a : A.\,\lambda b : B.\,a
+\end{equation}
+\textbf{(Left Projection)}  
+This function projects to the left, returning the first argument.
+
+\begin{equation}
+    ProjR=\lambda a : A.\,\lambda b : B.\,b
+\end{equation}
+\textbf{(Right Projection)}  
+This function projects to the right, returning the second argument.
+
+\begin{equation}
+    \lambda a : A.\,\lambda b : B.\,a\ ProjL\ b
+\end{equation}
+\textbf{(Or)}  
+This function computes the Or operation on the witnesses.
+
+
+\subsection{Examples}
+
+We want to translate the sentence "true is assigned to a", mathematically, this could be written mathematically as IsAssignedTo((true, a)) where (true, a) is a witness for the proposition IsAssignedTo. It is formed by the witness that true is its own witness and that a is its own witness too. We can write the proposition in the proposed language by defining a lambda function called $is\_assigned\_to$ and defined as:
+
+\begin{quote}
+$\mathrm{is\_assigned\_to}:=\lambda x: \{true\}.\,\lambda y: \{a\}.\,x\ y$
+\end{quote}

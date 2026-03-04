@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{xspace}
+\usepackage{amsmath, amssymb}
+
+\newcommand{\bred}{$\beta$-reduction\xspace}
+\newcommand{\lcalc}{$\lambda$-calculus\xspace}
+\newcommand{\lterm}{$\lambda$-term\xspace}
+\newcommand{\lterms}{$\lambda$-terms\xspace}
+
+
+\title{Notes on Theories}
+\author{Clément Michaud}
+\date{January 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Untyped \lcalc}
+
+\subsection{Simple construction}
+
+It is a way to abstract function on anything. Therefore, one does not need any notion of algebra or whatever. What remains is just:
+
+\begin{itemize}
+    \item variables
+    \item creating an expression representing an abstract function with variables (Abstraction)
+    \item apply the argument to create a new expression (it’s not the execution of the function) (Application)
+    \item \bred is the execution of the function.
+
+\end{itemize}
+
+More formally, we assume the existence of an infinite set of variables $V=\{x, y, z, \dots\}$. Expressions in the \lcalc are called \lterms. The set of all \lterms is $\Lambda$.\\
+
+\textbf{Definition} (The set $\Lambda$ of all $\lambda$-terms)
+\begin{enumerate}
+    \item (Variable) If $u \in V$, then $u \in \Lambda$.
+    \item (Application) If $M, N \in \Lambda$, then $(MN) \in \Lambda$.
+    \item (Abstraction) If $u \in V$ and $M \in \Lambda$, then $(\lambda u . M) \in \Lambda$.
+\end{enumerate}
+
+\subsection{Theorems}
+
+\noindent \textbf{Proposition:} If $L \in \text{Sub}(M)$, then $\text{Sub}(L) \subseteq \text{Sub}(M)$.
+
+\bigskip
+
+\noindent \textbf{Proof:} We prove the proposition by structural induction on the $\lambda$-term $M$.
+
+\medskip
+
+\noindent \textbf{Base Case:} Let $M$ be a variable $x \in V$. By definition, $\text{Sub}(x) = \{x\}$. If $L \in \text{Sub}(x)$, the only possibility is $L = x$, and thus $\text{Sub}(L) = \text{Sub}(x) = \{x\} \subseteq \text{Sub}(x)$. Therefore, the base case holds.
+
+\medskip
+
+\noindent \textbf{Inductive Case 1:} Suppose $M = (PQ)$ for some $\lambda$-terms $P$ and $Q$. By definition:
+\[
+\text{Sub}((PQ)) = \text{Sub}(P) \cup \text{Sub}(Q) \cup \{(PQ)\}
+\]
+Assume that the proposition holds for all subterms of $P$ and $Q$.
+
+We need to prove that if $L \in \text{Sub}((PQ))$, then $\text{Sub}(L) \subseteq \text{Sub}((PQ))$.
+
+There are three possibilities for $L$:
+\begin{enumerate}
+    \item If $L \in \text{Sub}(P)$, then by the induction hypothesis, $\text{Sub}(L) \subseteq \text{Sub}(P)$. Since $\text{Sub}(P) \subseteq \text{Sub}((PQ))$, we have $\text{Sub}(L) \subseteq \text{Sub}((PQ))$.
+    \item If $L \in \text{Sub}(Q)$, then by the induction hypothesis, $\text{Sub}(L) \subseteq \text{Sub}(Q)$. Since $\text{Sub}(Q) \subseteq \text{Sub}((PQ))$, we have $\text{Sub}(L) \subseteq \text{Sub}((PQ))$.
+    \item If $L = (PQ)$, then $\text{Sub}(L) = \text{Sub}((PQ))$, which trivially implies $\text{Sub}(L) \subseteq \text{Sub}((PQ))$.
+\end{enumerate}
+
+Thus, the inductive case for application holds.
+
+\medskip
+
+\noindent \textbf{Inductive Case 2:} Suppose $M = (\lambda x . P)$ for some $\lambda$-term $P$. By definition:
+\[
+\text{Sub}((\lambda x . P)) = \text{Sub}(P) \cup \{(\lambda x . P)\}
+\]
+Assume that the proposition holds for all subterms of $P$.
+
+We need to prove that if $L \in \text{Sub}((\lambda x . P))$, then $\text{Sub}(L) \subseteq \text{Sub}((\lambda x . P))$.
+
+There are two possibilities for $L$:
+\begin{enumerate}
+    \item If $L \in \text{Sub}(P)$, then by the induction hypothesis, $\text{Sub}(L) \subseteq \text{Sub}(P)$. Since $\text{Sub}(P) \subseteq \text{Sub}((\lambda x . P))$, we have $\text{Sub}(L) \subseteq \text{Sub}((\lambda x . P))$.
+    \item If $L = (\lambda x . P)$, then $\text{Sub}(L) = \text{Sub}((\lambda x . P))$, which trivially implies $\text{Sub}(L) \subseteq \text{Sub}((\lambda x . P))$.
+\end{enumerate}
+
+Thus, the inductive case for abstraction holds.
+
+\medskip
+
+\noindent \textbf{Conclusion:} By structural induction on $M$, we have shown that if $L \in \text{Sub}(M)$, then $\text{Sub}(L) \subseteq \text{Sub}(M)$.
+
+\hfill $\Box$
+
+\subsection{Grammar}
+
+$\Lambda = V \mid (\Lambda\Lambda) \mid (\lambda V.\Lambda) $
+
+\end{document}

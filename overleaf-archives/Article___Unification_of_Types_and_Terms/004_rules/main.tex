@@ -1,0 +1,37 @@
+In this section we review various relations and rules defined on $\LambdaTau$.
+
+\subsection{Compatibility}
+
+\input{\currfiledir compatibility}
+
+\subsection{\alphaequivalence}
+
+\input{\currfiledir 001_alpha_equivalence}
+
+\subsection{Signature \& Return Type}
+
+The signature and return type of functions are also very important concepts both in programming and type theory applied to proof systems in general. In a language like C, we would say from the function signature \texttt{bool\ f(int x)} that \texttt{f} expects a variable of type \texttt{int} and return an object of type \texttt{bool}. Notice that, we do not need to know anything about the body to know that this function is constrained to return a boolean value. In dependent type, one would use $\to$, $\Pi$ and $\Sigma$ notation to represent signatures and define return types. For example, in dependent types \texttt{f} would have the signature $int \to bool$. Therefore, without any information on the body of the function we can already know that this function should return a \texttt{bool}. However, if we try to interpret the deeper meaning of this relation, we would say that there exist a computation process that takes an element of type \texttt{int} and transforms it in an element of type \texttt{bool} and the body represents this transformation.
+
+One question that naturally emerges is how can we define some kind of equivalence between functions returning a given type in the \lambdatypes formalism. We can easily start to build some intuition by analyzing the identity functions.
+
+What should be the return type of $\lambda x \oftype X.x$? $X$, right? What should be the return type of $\lambda x \oftype X.M$. Certainly $M$ or, more specifically, the type of expression represented by $M$. If $M$ is a variable of type $A$, then the return type is $A$. If $M$ is an abstraction, then it should be the type of the abstraction itself and if it is an application, then it should be the type of the expression after executing the application. We already see some kind of recursive pattern standing out that we try to capture in the definition of \sigmaequivalence.
+
+\subsection{\Ostepbetareduction}
+
+\input{\currfiledir 002_one_step_beta_reduction}
+
+\subsection{\Osteptaureduction}
+
+\input{\currfiledir 003_one_step_tau_reduction}
+
+\subsection{\Msteptaureduction}
+
+\input{\currfiledir 004_multi_step_tau_reduction}
+
+\subsection{\tauconversion}
+
+\input{\currfiledir 005_tau_conversion}
+
+\subsection{\taunormalform}
+
+\input{\currfiledir 006_tau_normal_form}

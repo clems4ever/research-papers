@@ -1,0 +1,54 @@
+% Define a new theorem style with extra space
+\newtheoremstyle{spaced}
+  {12pt}   % Space above (adjust to increase/decrease)
+  {12pt}   % Space below (adjust to increase/decrease)
+  {} % Body font (keep as default or change)
+  {}        % Indent amount
+  {\bfseries} % Theorem head font
+  {}       % Punctuation after theorem head
+  {1em}     % Space after theorem head
+  {}        % Theorem head spec
+
+\theoremstyle{spaced}
+
+\mdfdefinestyle{myenvs}{%
+  hidealllines=true,%
+  nobreak=true, % comment this to allow breaking
+  leftmargin=0pt,
+  rightmargin=0pt,
+  innerleftmargin=0pt,
+  innerrightmargin=0pt,
+}
+
+\newmdtheoremenv[style=myenvs]{theorem}{Theorem}[section] % Main counter
+\newmdtheoremenv[style=myenvs]{definition}[theorem]{Definition}
+\newmdtheoremenv[style=myenvs]{lemma}[theorem]{Lemma}
+\newmdtheoremenv[style=myenvs]{examples}[theorem]{Examples}
+\newmdtheoremenv[style=myenvs]{proposition}[theorem]{Proposition}
+\newmdtheoremenv[style=myenvs]{corollary}[theorem]{Corollary}
+
+
+\newenvironment{reusable}[2]{%
+        \restatable{#1}{#2}
+        \label{#2}}
+    {\endrestatable}
+
+\newenvironment{longproof}[1]{%
+        \subsection{Proof of~\ref{#1}}
+        \csname #1\endcsname*
+        \proof
+        \label{proof:#1}}
+    {\endproof}
+
+\newenvironment{reusableWithProof}[2]{%
+        \def\theprooflabel{proof:#2}
+        \restatable{#1}{#2}
+        \label{#2}}
+    {%
+        \endrestatable
+        The proof is given in \cref{\theprooflabel}.
+    }
+
+\newcommand{\CapitalizedCommand}[1]{%
+    \expandafter\makefirstuc\expandafter{#1}
+}

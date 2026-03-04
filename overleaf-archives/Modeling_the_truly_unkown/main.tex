@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{xspace}
+\usepackage{needspace, etoolbox}
+\usepackage{url}
+
+\title{Modeling the Truly Unknown}
+\author{
+Clément Michaud \\ Independent Researcher\\ \texttt{clement.michaud34@gmail.com}
+}
+\date{March 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\begin{minipage}{0.9\textwidth}
+\small
+\textbf{Abstract.} Probability theory has long been a fundamental tool for modeling uncertainty, but its traditional formulation assumes a fixed set of possible events. This assumption makes it inadequate for handling situations where new possibilities emerge. This paper explores the challenges of defining probability spaces in dynamic environments and considers alternative approaches, particularly in artificial intelligence and decision-making systems, where evolving knowledge must be incorporated into probabilistic models.
+\end{minipage}
+\end{center}
+
+\vspace{10pt}
+
+\section{Introduction}
+Probability theory is a cornerstone of uncertainty modeling, but its conventional formulation assumes a fixed sample space. In real-world scenarios, unforeseen outcomes often arise, challenging this assumption. This issue is especially relevant in fields like artificial intelligence, where dynamic environments introduce previously unconsidered states. A self-driving car, for instance, may encounter an unusual road condition, such as an obstruction caused by an unexpected event (e.g., a drone crashing onto the road). Should the car's probability model be revised from scratch, or can the probability space adapt dynamically?
+
+In this paper, we analyze the limitations of fixed probability spaces and explore potential solutions for handling evolving uncertainties.
+
+\section{Defining a Probability Space}
+A probability space\cite{probability_space} consists of:
+
+\begin{itemize}
+\item A \textbf{sample space} ($\Omega$), the set of all mutually exclusive outcomes.
+\item An \textbf{event space} ($\mathcal{F}$), a sigma-algebra over the sample space.
+\item A \textbf{probability function} ($P$), satisfying the axioms of probability.
+\end{itemize}
+
+This classical definition assumes that $\Omega$ is known in advance. However, in many cases, new elements must be introduced into $\Omega$ over time.
+
+\section{The Challenge of Unknown Outcomes}
+Consider rolling a die, with a typical sample space of ${1, 2, 3, 4, 5, 6}$. But what if an unaccounted outcome occurs—say, the die lands on its edge? Should we redefine $\Omega$?
+
+In more complex scenarios, such as financial markets or AI-based decision-making, new possibilities arise unpredictably. A fixed sample space cannot account for such unforeseen contingencies, suggesting the need for an adaptive probability framework.
+
+\section{Aleatoric vs. Epistemic Uncertainty}
+Uncertainty can be categorized into:
+
+\begin{itemize}
+\item \textbf{Aleatoric uncertainty}: Inherent randomness within a well-defined system (e.g., fair dice rolls, coin flips). Standard probability theory suffices here.
+\item \textbf{Epistemic uncertainty}: Uncertainty due to incomplete knowledge, often arising from missing or evolving sample spaces. This is the central concern of this paper.
+\end{itemize}
+
+Pei Wang \cite{wang2004bayesianism} argues that Bayesian updating fails when the sample space itself evolves. This suggests a need for alternative frameworks that allow for dynamic expansion of $\Omega$.
+
+\section{The Connection to Artificial Intelligence}
+AI systems typically maintain a probability distribution over known states. When an AI encounters a novel event (e.g., a medical diagnosis system encountering a previously undocumented disease), it must either discard its prior model or integrate the new information dynamically.
+
+A practical approach is to allocate probability mass to an \textit{unknown category}, enabling smooth integration of new states. However, formalizing a mechanism for expanding $\Omega$ while preserving consistency with prior knowledge remains an open challenge.
+
+\section{The Case for a Dynamic Sample Space}
+A naive solution might be to assume the existence of a "biggest" sample space holding all statements one can make about the world. However, this leads to paradoxes such as Burali-Forti and Russell’s paradox. Instead, I propose an \textit{incrementally expanding} sample space, similar to dependent type theory’s hierarchical structure.
+
+\subsection{Defining an Extension Operator}
+We define an \textbf{extension operator} $E$ such that:
+
+\begin{equation}
+E: (\Omega, P) \rightarrow (\Omega', P')
+\end{equation}
+
+where $\Omega' = \Omega \cup {x}$ for some new event $x$, and $P'$ maintains consistency by redistributing probability mass while preserving relative likelihoods among prior events. One possible formulation is:
+
+\begin{equation}
+P'(A) = \begin{cases}
+(1 - \epsilon) P(A) & A \subseteq \Omega \\
+\epsilon & A = {x}
+\end{cases}
+\end{equation}
+
+where $\epsilon$ represents an initial probability assignment to the new event. The choice of $\epsilon$ is a subject of further study, as it must balance prior knowledge retention with adaptability.
+
+\section{Related Work}
+Several alternative probability frameworks have been proposed:
+
+\begin{itemize}
+\item \textbf{Imprecise Probability} \cite{walley1991imprecise}: Uses interval-based probabilities instead of fixed values to accommodate uncertainty.
+\item \textbf{Dempster-Shafer Theory} \cite{shafer1976mathematical}: Allows for belief functions that assign probability mass to sets of outcomes, useful for handling unknown possibilities.
+\item \textbf{Non-Monotonic Logic} \cite{gabbay1994handbook}: Captures reasoning under changing knowledge.
+\end{itemize}
+
+These approaches align with our goal of modeling evolving uncertainty but require further integration into probability theory.
+
+\section*{Conclusion}
+Probability theory struggles with epistemic uncertainty when sample spaces evolve. To address this, we propose a framework that dynamically extends the sample space while maintaining probabilistic coherence. Future research should explore rigorous mechanisms for defining extension operators, ensuring adaptability without sacrificing consistency.
+
+\begin{thebibliography}{9}
+\bibitem{probability_space} Wikipedia. \textit{Probability Space}. \url{https://en.wikipedia.org/wiki/Probability_space}.
+\bibitem{wang2004bayesianism} P. Wang. \textit{The Limitation of Bayesianism}. 2004. \url{https://faculty.cc.gatech.edu/~isbell/reading/papers/wang.bayesianism.pdf}.
+\bibitem{walley1991imprecise} P. Walley. \textit{Statistical Reasoning with Imprecise Probabilities}. Chapman and Hall, 1990.
+\bibitem{shafer1976mathematical} G. Shafer. \textit{A Mathematical Theory of Evidence}. Princeton University Press, 1976.
+\bibitem{gabbay1994handbook} D. Gabbay, C. Hogger, and J. Robinson. \textit{Handbook of Logic in Artificial Intelligence and Logic Programming: Nonmonotonic Reasoning and Uncertain Reasoning}. Clarendon Press, 1994.
+\end{thebibliography}
+
+\end{document}

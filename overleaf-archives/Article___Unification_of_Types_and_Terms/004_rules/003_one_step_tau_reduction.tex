@@ -1,0 +1,24 @@
+At this point, \betareduction allows us to \textit{execute} functions but we are still missing the connection between terms and types. Before moving on with the formal definition of \taureduction, we review the connection we can make with the language of Dependent Types.
+
+In the theory of Dependent Types, there are three main constructs for types: the arrow $\to$ representing the functions from a type to a type ($A \to B$ for example), $\Sigma$ for the disjunctive dependent types like $\Sigma x \oftype A.B$ and $\Pi$ for conjunctive types like $\Pi x \oftype A.B$. In these latter cases, B is an expression built from these three constructs. Roughly speaking, $\Pi$ and $\Sigma$ types have been introduced to be able to express that some types depends on terms. For example, one can write the following dependent type: $\Pi x:A.x \to B$. We can imagine that if $A$ is the set of natural number, then this expression would somehow represent the set of functions from each natural number to a set $B$. One can interpret that as an indexation of $B$ where $i \in \mathbb{N}$ and $B_i$ is an element of $B$. It is already clear that $\Sigma$ and $\Pi$ expressions are very similar to \lambdaterms. The difference is that application is replaced by the arrow operator explaining why we need a different set of rules. They are different even though we can feel that they are not so much different. In both cases, the expression functionally describes the process for building one thing from another thing. In simply typed \lambdacalc, we have direct access to the algorithm that is described by the \lambdaexpr and in dependent type we also have some kind of algorithm based on the arrow operator this time. However, I argue that this operator is simply hiding the fact that there is some algorithm between the left and right part of the operator that could be described by a \lambdaexpr. In other words, we use the arrow because we want to abstract the algorithm away. In the framework of $\LambdaTau$, I try to unify types and terms based on this simple realization that all those expressions are not so different and they can likely be unified.
+
+$A \to B$ in dependent type means there is an algorithm that takes any $A$ and transforms it via an algorithm into $B$. We already know a function that does that in \lambdaterms, it is the function represented by $\tabs x:A.B$. However, strictly speaking, this function describes a constant function where any $x \in A$ is transformed into $B$ whatever the value of $x$. However, \lambdatypes takes that expression to represent an equivalence class representing all functions from $A$ to $B$ instead and $\lambda X.\lambda Y.\tabs x:X.Y$ represents the equivalence relation of functions of the form $\bullet \to \bullet$. By taking this view, we need to make a connection between $\tabs x:A.x$ and $\tabs x:A.A$. This is what \taureduction introduces by extending \betareduction with one more rule for functional equivalence.
+
+\begin{reusable}{definition}{definitionOneStepTauReduction}
+We say that $M$ \osteptaureduces to $N$, and we write $M \stotau N$, if one of those rules applies:
+\[
+\begin{array}{llll}
+    M \stobeta N & \Longrightarrow & M \stotau N & \text{(\betareduction extension)} \\
+    x \in \text{BV}(A) & \Longrightarrow & \tabs x:M.A \stotau \tabs x:M.A[x := M] & \text{(functional reduction)} \\
+\end{array}
+\]
+\end{reusable}
+
+From this definition, we observe that \taureduction extends \betareduction. We also see that the functional reduction rule eliminates the bound variables of the abstractions which intuitively tells us that this new rule will certainly ensure the existence of some kind of normal form for \taureduction that we will use to represent the functional equivalence classes we discussed.
+
+We can now proceed with the process of applying multiple steps of \osteptaureduction.
+
+% \[ (\lambda x:a.x)a \equiv (\lambda x:a.a)a \equiv a \]
+% \[ (\lambda x:(\lambda y:a.y)a.x)a \equiv (\lambda x:(\lambda y:a.a)a.a)a \equiv a \]
+% \[ (\lambda x:(\lambda y:a.y)a.(\lambda y:a.y)a)a \equiv (\lambda x:(\lambda y:a.a)a.a)a \equiv a \]
+

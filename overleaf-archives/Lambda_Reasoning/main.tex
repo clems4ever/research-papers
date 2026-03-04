@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{xspace}
+\usepackage{amsmath, amssymb}
+\usepackage{amsthm}
+\usepackage{needspace, etoolbox}
+\usepackage{mdframed}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{thm-restate}
+
+\newcommand{\lcalc}{$\lambda$-calculus\xspace}
+\newcommand{\lexpr}{$\lambda$-expression\xspace}
+\newcommand{\lterm}{$\lambda$-term\xspace}
+\newcommand{\lterms}{$\lambda$-terms\xspace}
+
+% Define a new theorem style with extra space
+\newtheoremstyle{spaced}
+  {6pt}   % Space above (adjust to increase/decrease)
+  {10pt}   % Space below (adjust to increase/decrease)
+  {} % Body font (keep as default or change)
+  {}        % Indent amount
+  {\bfseries} % Theorem head font
+  {.}       % Punctuation after theorem head
+  {1em}     % Space after theorem head
+  {}        % Theorem head spec
+
+\theoremstyle{spaced}
+
+\mdfdefinestyle{myenvs}{%
+  hidealllines=true,%
+  nobreak=true, % comment this to allow breaking
+  leftmargin=0pt,
+  rightmargin=0pt,
+  innerleftmargin=0pt,
+  innerrightmargin=0pt,
+}
+
+\newmdtheoremenv[style=myenvs]{theorem}{Theorem}[section] % Main counter
+\newmdtheoremenv[style=myenvs]{definition}[theorem]{Definition}
+\newmdtheoremenv[style=myenvs]{lemma}[theorem]{Lemma}
+\newmdtheoremenv[style=myenvs]{examples}[theorem]{Examples}
+\newmdtheoremenv[style=myenvs]{proposition}[theorem]{Proposition}
+\newmdtheoremenv[style=myenvs]{corollary}[theorem]{Corollary}
+
+\newenvironment{reusable}[2]{%
+        \restatable{#1}{#2}
+        \label{#2}}
+    {\endrestatable}
+
+\newenvironment{longproof}[1]{%
+        \subsection{Proof of \cref{#1}}
+        \csname #1\endcsname*
+        \proof
+        \label{proof:#1}}
+    {\endproof}
+
+
+\title{Lambda-Reasoning}
+\author{Clément Michaud}
+\date{January 2025}
+
+\begin{document}
+
+\maketitle
+
+\input{version_005}
+
+\end{document}

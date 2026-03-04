@@ -1,0 +1,282 @@
+\subsection{Encodings}
+
+\subsubsection{$A \times B$}
+
+The polymorphic $A \times B$ is defined as follows:
+\[
+    Pair := \lambda A.\lambda B.\lambda C.\lambda f:(\lambda x:A.\lambda y:B.C).C
+\]
+
+It is also called the constructor.
+
+It has two interesting projections $\pi_1$ and $\pi_2$ defined as follows:
+
+\[
+\begin{array}{l}
+    \pi_1 := \lambda A.\lambda B.\lambda x:(Pair\ A\ B).x A (\lambda x:A.\lambda y:B.A)) \\
+    \pi_2 := \lambda A.\lambda B.\lambda x:(Pair\ A\ B).x B (\lambda x:A.\lambda y:B.B)) \\
+\end{array}
+\]
+
+We can \taureduce them:
+\[
+\begin{array}{ll}
+    \pi_1 & :=\;       \lambda A.\lambda B.\lambda x:(Pair\ A\ B).x A (\lambda x:A.\lambda y:B.A)) \\
+        &\ \totau      \lambda A.\lambda B.\lambda x:(Pair\ A\ B).(Pair\ A\ B) A (\lambda x:A.\lambda y:B.A)) \\
+        &\ \totau      \lambda A.\lambda B.\lambda x:(Pair\ A\ B).(\lambda f:(\lambda x:A.\lambda y:B.A).A) (\lambda x:A.\lambda y:B.A)) \\
+        &\ \totau      \lambda A.\lambda B.\lambda x:(Pair\ A\ B).A \\
+\end{array}
+\]
+
+\[
+\begin{array}{ll}
+    \pi_2 & :=\;       \lambda A.\lambda B.\lambda x:(Pair\ A\ B).x B (\lambda x:A.\lambda y:B.B)) \\
+        &\ \totau      \lambda A.\lambda B.\lambda x:(Pair\ A\ B).(Pair\ A\ B) B (\lambda x:A.\lambda y:B.B)) \\
+        &\ \totau      \lambda A.\lambda B.\lambda x:(Pair\ A\ B).(\lambda f:(\lambda x:A.\lambda y:B.B).B) (\lambda x:A.\lambda y:B.B)) \\
+        &\ \totau      \lambda A.\lambda B.\lambda x:(Pair\ A\ B).B \\
+\end{array}
+\]
+
+\subsubsection{$A + B$}
+
+The polymorphic $A + B$ is defined as follows:
+\[
+    Either := \lambda A.\lambda B.\lambda C.\lambda f:(\lambda x:A.C).\lambda g:(\lambda x:B.C).C
+\]
+
+It is also called the constructor of $A + B$ where $A$ and $B$ are any expression.
+
+\[
+    EitherElim := \lambda A.\lambda B.\lambda C.\lambda x: Either A B C.\lambda f:(\lambda x:A.C).\lambda g:(\lambda x:B.C).x f g
+\]
+
+\[
+\begin{array}{lll}
+    inl & :=        & \lambda A.\lambda B.\lambda E:(Either\ A\ B).E\ A\ (\lambda x:A.A) (\lambda x:B.A) \\
+        & \totau    & \lambda A.\lambda B.\lambda E:(Either\ A\ B).(Either\ A\ B)A\ (\lambda x:A.A) (\lambda x:B.A) \\
+        & \totau    & \lambda A.\lambda B.\lambda E:(Either\ A\ B).A \\
+\end{array}
+\]
+
+\[
+\begin{array}{lll}
+    inr & :=        & \lambda A.\lambda B.\lambda E:(Either\ A\ B).E\ B\ (\lambda x:A.B) (\lambda x:B.B) \\
+        & \totau    & \lambda A.\lambda B.\lambda E:(Either\ A\ B).(Either\ A\ B)B\ (\lambda x:A.B) (\lambda x:B.B) \\
+        & \totau    & \lambda A.\lambda B.\lambda E:(Either\ A\ B).B
+\end{array}
+\]
+
+
+\subsection{Proof of $P \land Q \implies Q \land P$}
+
+\[
+    Swap := \lambda P.\lambda Q.\lambda x:Pair\ P\ Q.(Pair\ (\pi_2\ P\ Q\ x) (\pi_1\ P\ Q\ x)
+\]
+
+Does this \taureduces to $\lambda P.\lambda Q.\lambda x:(Pair\ P\ Q).Pair\ Q\ P$ ?
+
+\[
+\begin{array}{ll}
+    Swap    & :=\;         \lambda P.\lambda Q.\lambda x:Pair\ P\ Q.Pair\ (\pi_2\ P\ Q\ x) (\pi_1\ P\ Q\ x) \\
+            &\ \totau      \lambda P.\lambda Q.\lambda x:Pair\ P\ Q.Pair\ (\pi_2\ P\ Q\ (Pair\ P\ Q)) (\pi_1\ P\ Q\ (Pair\ P\ Q)) \\
+            &\ \totau      \lambda P.\lambda Q.\lambda x:Pair\ P\ Q.Pair\ Q (\pi_1\ P\ Q\ Pair\ P\ Q) \\
+            &\ \totau      \lambda P.\lambda Q.\lambda x:Pair\ P\ Q.Pair\ Q\ P \\
+\end{array}
+\]
+
+\subsection{Proof of $P \implies P \vee Q$}
+
+We want to find a lambda expression that has \taureduces to $\lambda P.\lambda x:P.\lambda Q.Either\ P\ Q$
+
+Such a function is simple to find:
+
+\[
+\begin{array}{lll}
+    inl2 & :=        & \lambda P.\lambda x:P.\lambda Q.Either\ x\ Q \\
+        & \totau    & \lambda P.\lambda x:P.\lambda Q.Either\ P\ Q
+\end{array}
+\]
+
+Equivalently for $P \implies Q \vee P$
+
+\[
+\begin{array}{lll}
+    inr2 & :=        & \lambda P.\lambda x:P.\lambda Q.Either\ Q\ x \\
+        & \totau    & \lambda P.\lambda x:P.\lambda Q.Either\ Q\ P
+\end{array}
+\]
+
+\subsection{Proof of Modus Ponens $(P \implies Q) \land P \implies Q$}
+
+For two propositions $P$ and $Q$, we look for a term that \taureduces to:
+
+\[
+    ModusPonens := \lambda P.\lambda Q.\lambda x:(Pair\ (\lambda y:P.Q)\ P).Q
+\]
+
+Intuitively we want to find a term $y$ that would allow us to apply the lambda with $y$ as a variable in order to obtain $Q$
+
+\[
+\begin{array}{lll}
+    ModusPonensProof    & :=        & \lambda P.\lambda Q.\lambda x:(Pair\ (\lambda y:P.Q)\ P).(\pi_1 (\lambda y:P.Q)\ P\ x) (\pi_2 (\lambda y:P.Q)\ P\ x) \\
+                        & \totau    &\lambda P.\lambda Q. \lambda x:(Pair\ (\lambda y:P.Q)\ P).(\lambda y:P.Q) (\pi_2 (\lambda y:P.Q)\ P\ x) \\
+                        & \totau    & \lambda P.\lambda Q.\lambda x:(Pair\ (\lambda y:P.Q)\ P).(\lambda y:P.Q) P \\
+                        & \totau    & \lambda P.\lambda Q.\lambda x:(Pair\ (\lambda y:P.Q)\ P).Q \\
+                        & \alphaeq  & ModusPonens
+\end{array}
+\]
+
+\subsection{Equivalence}
+
+Equivalence is the implication in both directions. Therefore it is equivalent to the type
+\[
+    (P \implies Q) \land (Q \implies P)
+\]
+
+Let us define the implication operator first:
+
+\[
+    Implication := \lambda P.\lambda Q.\lambda x:P.Q
+\]
+
+\[
+    Equivalence = \lambda P.\lambda Q.Pair\ (Implication\ P\ Q)\ (Implication\ Q\ P) 
+\]
+
+It is then easy to prove that $(P \iff Q) \implies (P \implies Q)$.
+
+The proof is:
+\[
+\begin{array}{lll}
+    Proof   & :=        & \lambda P.\lambda Q.\pi_1 (Implication\ P\ Q) (Implication\ Q\ P) (Equivalence P Q)\\
+            & \totau    & \lambda P.\lambda Q.\pi_1 (Implication\ P\ Q) (Implication\ Q\ P) (Pair\ (Implication\ P\ Q)\ (Implication\ Q\ P)) \\
+            & \totau    & \lambda P.\lambda Q.Implication\ P\ Q
+\end{array}
+\]
+
+We can proceed equivalently for the other side.
+
+\subsection{Equality}
+
+Equality and Equivalence are collapsing in this framework since everything is a proposition, even atoms. Therefore:
+
+\[
+    Equal := Equivalence
+\]
+
+\subsection{Reflexivity}
+
+\[
+    Reflexivity := \lambda x.\lambda P:(\lambda y.\lambda z.\lambda C.C).P\ x\ x
+\]
+
+\[
+    Reflexivity2 := \lambda S.\tabs R:(\tabs x:S.\tabs y:S.\lambda T.T).\tabs x:S.\app {\app R x} {x}
+\]
+
+Reflexivity2 \taureduces to
+\[
+    \lambda S.\tabs R:(\tabs x:S.\tabs y:S.Falsehood).\tabs x:S.Falsehoold
+\]
+
+\subsection{Contradiction}
+
+Contradiction is defined as the proposition that implies anything.
+
+\[
+    Falsehood := \lambda P.P
+\]
+
+\subsection{$\neg P$}
+
+The negation of a proposition $P$ is encoded as:
+
+\[
+    Not := \lambda P.\lambda x:P.Falsehood
+\]
+
+\subsection{Proof by contradiction}
+
+A proof by contradiction of a statement $P$ tells us that if we assume $P$ and derive $Falshood$, then certainly $\neg P$. The encoding for the proof by contradiction is as follows:
+
+\[
+    \lambda P.\lambda x:(Implication\ (Not\ P)\ Falsehood).P \quad\Longleftrightarrow\quad (\neg P \implies \bot) \implies P
+\]
+
+One can easily prove $(P \implies \bot) \implies \neg P$. We search for a term that \taureduces to:
+
+\[
+    \lambda P.\lambda x:(\lambda y:P.Falsehood).Not\ P
+\]
+
+\[
+\begin{array}{lll}
+    Proof   & :=      & \lambda P.\lambda x:(\lambda y:P.Falsehood).\lambda z:P.x\ z \\
+            & \totau  & \lambda P.\lambda x:(\lambda y:P.Falsehood).\lambda z:P.(\lambda y:P.Falsehood)\ z \\
+            & \totau  & \lambda P.\lambda x:(\lambda y:P.Falsehood).\lambda z:P.(\lambda y:P.Falsehood)\ P \\
+            & \totau  & \lambda P.\lambda x:(\lambda y:P.Falsehood).\lambda z:P.Falsehood \\
+            & =       & \lambda P.\lambda x:(\lambda y:P.Falsehood).Not\ P
+\end{array}
+\]
+
+\subsection{Law of non-contradiction from Aristotle}
+
+\[
+    (P \land P \implies \bot) \implies  \bot
+\]
+
+\[
+    \lambda P.\text{ModusPonens}\ P\ \text{Falshood}
+\]
+
+\subsection{Proof of $A \land B \implies A$ by contradiction}
+
+Let us state the property we want to prove by contradiction:
+
+\[
+    P := \lambda A.\lambda B.Implication (Pair\ A\ B)\ A
+\]
+
+We want to prove:
+
+\[
+\begin{array}{lll}
+    P'  & :=      & \lambda A.\lambda B.\lambda x:(Not\ (P\ A\ B)).Falsehood \\
+        & =       & \lambda A.\lambda B.\lambda x:(\lambda y:(Implication\ (Pair\ A\ B)\ A).Falsehood).Falsehood \\
+        & \Leftrightarrow       & \neg P \implies \bot
+\end{array}
+\]
+
+\[
+\begin{array}{lll}
+    P'  & :=      & \lambda A.\lambda B.\lambda x:(\lambda y:(Implication (Pair A B) A).Falsehood).x P A B \\
+        & \totau  & \lambda A.\lambda B.\lambda x:(\lambda y:(Implication (Pair A B) A).Falsehood).(\lambda y:(Implication (Pair A B) A).Falsehood) P A B \\
+        & =       & \lambda A.\lambda B.\lambda x:(\lambda y:(Implication (Pair A B) A).Falsehood).(\lambda y:(Implication (Pair A B) A).Falsehood) Implication (Pair A B) A \\
+        & \totau  & \lambda A.\lambda B.\lambda x:(\lambda y:(Implication (Pair A B) A).Falsehood).Falsehood
+\end{array}
+\]
+
+
+
+\subsection{If-Then-Else}
+
+\[
+    true := \lambda X.\lambda Y.X
+\]
+\[
+    false := \lambda X.\lambda Y.Y
+\]
+\[
+    Bool := \lambda X.\lambda Y.*
+\]
+
+\[
+    If := \lambda b: Bool.\lambda A.\lambda B.b A B
+\]
+Examples:
+\[
+    If true String Int \totau Bool String Int \totau String
+\]
+
+
+

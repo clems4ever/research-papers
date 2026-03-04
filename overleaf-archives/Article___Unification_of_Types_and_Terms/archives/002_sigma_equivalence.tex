@@ -1,0 +1,26 @@
+\sigmaequivalence is introduced in order to define an equivalence relation between the terms and the types. This somehow simulate the use of signature to describe a set of functions and ensure that application only happen when the input being provided to the function has a type that matches the input type of the function.
+
+\begin{reusable}{definition}{definitionSigmaEquivalence}
+We define the \sigmaequivalence relation $\sigmaeq$ as follows:
+
+    \begin{itemize}
+        \item \textbf{Element Type Congruence:} $\lambda x \oftype M.N \sigmaeq \lambda x \oftype M.N[x := M]$.
+        \item \textbf{Reflexivity:} $M \sigmaeq M$.
+        \item \textbf{Symmetry:} If $M \sigmaeq N$ then $N \sigmaeq M$.
+        \item \textbf{Transitivity:} If $M \sigmaeq N$ and $N \sigmaeq P$ then $M \sigmaeq P$.
+        \item \textbf{\alphaequivalence:} If $M_1 \alphaeq M_2$ then $M_1 \sigmaeq M_2$.
+        \item \textbf{Application Left:} If \( M_1 \sigmaeq M_2 \) then for all $L$ we have $M_1 L \sigmaeq M_2 L$.
+        \item \textbf{Application Right:} If \( M_1 \sigmaeq M_2 \) then for all $L$ we have $L M_1 \sigmaeq L M_2$.
+        \item \textbf{Untyped Abstraction:} If \( M_1 \sigmaeq M_2 \) then for any $x$ we have $\lambda x.M_1 \sigmaeq \lambda x.M_2$.
+        \item \textbf{Typed Abstraction Arg:} If \( M_1 \sigmaeq M_2 \) then for any $x$ and $L$ we have:
+        \[
+            \lambda x \oftype M_1.L \sigmaeq \lambda x \oftype M_2.L
+        \]
+        \item \textbf{Typed Abstraction Body:} If \( M_1 \equiv_\alpha M_2 \) then for any $x$ and $L$ we have:
+        \[
+            \lambda x \oftype L.M_1 \sigmaeq \lambda x \oftype L.M_2
+        \]
+    \end{itemize}
+\end{reusable}
+
+\sigmaequivalence is obviously an equivalence relation by definition.

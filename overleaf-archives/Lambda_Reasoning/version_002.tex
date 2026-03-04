@@ -1,0 +1,25 @@
+\section{Version 2}
+
+\subsection{Proposition}
+
+A proposition is written R:RelT(x: LeftT, y: RightT) and it is equivalent to the following lambda expression:
+
+\begin{equation}
+\begin{split}
+\lambda R:RelT.\lambda x:LeftT.\lambda y:RightT.(R\ x\ y)
+\end{split}
+\end{equation}
+
+A proposition $P$ means that $\forall x \in \text{dom(LeftT)}$ and $\forall y \in \text{dom(RightT)}$, $P$ is a proof such that $x R y$ holds.
+The domain of $P$ is the set of tuples $(R, x, y)$ such that $x R y$ holds.
+
+A proposition $\overline{P}$ is a proof such that $x R y$ does not hold.
+The domain of $\overline{P}$ is the empty set.
+
+\subsection{Measures}
+
+Instances of relations $aRb$ entering the system are called measures.
+
+\subsection{Objective}
+
+The objective of the system is to find the most compact set of hypotheses explaining the data, i.e., leading to a proof for each data.

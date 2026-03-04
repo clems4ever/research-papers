@@ -1,0 +1,26 @@
+\lambdacalc is a formal system in mathematical logic and computer science that expresses computation through function abstraction and application. Developed by Alonzo Church in the 1930s, it serves as the foundation for functional programming and type theory. By representing computation solely through anonymous functions and variable substitution, \lambdacalc provides a minimal yet powerful model of computation.
+
+\subsection{Language}
+
+The language of pure lambda calculus, written $\Lambda$, is quite simple as it only has three kind of valid terms.
+
+\begin{itemize}
+    \item \textbf{Variables}: Represent symbols such as $x, y, z, A, B, C$.
+    \item \textbf{Abstraction}: Function definition as $\uabs x.M$.
+    \item \textbf{Application}: Function execution as $\app M N$.
+\end{itemize}
+
+This language is augmented with conversion and reduction rules that we review below. As a reminder, $M[x := N]$ represents the substitution of the variable $x$ by $N$ in $M$, $\text{FV}(M)$ represents the set of free variables in $M$ and $\text{BV}(M)$ represents the set of bound variables in $M$.
+
+\subsection{Conversion \& Reduction Rules}
+\begin{itemize}
+    \item \textbf{Alpha Conversion} ($\alpha$-conversion): Renaming bound variables.
+    \item \textbf{Beta Reduction} ($\beta$-reduction): Function application:
+    \[
+        (\lambda x. M) N \rightarrow M[x := N].
+    \]
+    \item \textbf{Eta Conversion} ($\eta$-conversion): Function equivalence:
+    \[
+        \lambda x. (M x) \equiv M, \quad \text{if } x \notin \text{FV}(M).
+    \]
+\end{itemize}

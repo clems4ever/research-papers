@@ -1,0 +1,272 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{todonotes}
+% used to make long sets automatically wrapped.
+\usepackage{breqn}
+\usepackage{hyperref}
+
+\title{Experience-Grounded Modeling}
+\author{Clément Michaud}
+\date{December 2024}
+
+\newcommand{\kb}[0]{\mathcal{K}}
+
+\newcommand{\term}[1]{\textit{#1}}
+\newcommand{\extension}[2]{\mathcal{E}(#1 \mid #2)}
+\newcommand{\intension}[2]{\mathcal{I}(#1 \mid #2)}
+\newcommand{\intplaus}[2]{\mathcal{I}_{\mathcal{P}}(#1 \mid \mathcal{#2})}
+\newcommand{\tstatement}[2]{\term{#1} \to \term{#2}}
+\newcommand{\plausability}[3]{\langle\tstatement{#1}{#2} \mid \mathcal{#3}\rangle}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\subsection{The prerequisites of AGI}
+
+\paragraph{Evidence and Raw Observations in AGI.}
+In the context of Artificial General Intelligence (AGI), an agent only has access to raw observations gathered through its sensory inputs. These observations do not inherently carry high-level meaning or interpretation but serve as the foundation for building confidence in certain statements about the world. Following Pei Wang's theory, we refer to these observations as \textit{evidences}. Evidences are the primary data that the agent uses to evaluate and update its plausibilities for different statements, based on how consistent or inconsistent the observations are with the agent's existing knowledge. The agent's ability to reason and act relies on organizing and processing these evidences to incrementally construct a coherent model of the world, without assuming access to a complete or pre-defined representation of all possible states or relationships. Without this subjectivity, the only robust framework for reasoning would be Bayesianism, which relies on probabilities to model uncertainty. However, the Bayesian framework often proves to be intractable in practice, as it requires computing marginal distributions over all possible states of the world, a task that becomes infeasible in most real-world scenarios.
+
+
+\paragraph{Subjectivity of an Agent's Experience.}
+An agent in Artificial General Intelligence (AGI) has access only to the data coming from its own experience. This experience is inherently subjective, and there is no justification for assuming that the agent should build an objective representation of the world. Humans and animals are biased by the need to communicate their experiences with others, necessitating a shared, common representation that is often labeled as "truth." However, this shared truth is shaped by subjective interpretations, which may not make sense for an autonomous agent. Instead, raw data collected by the agent should remain free from any pre-existing interpretation, allowing for inferences to emerge naturally from the data. Following Pei Wang's argument, an agent should adopt an experience-grounded semantic rather than a model-theoretic semantic. In this framework, each agent builds an internal representation of the world based solely on its own unique experience, leading to representations that differ fundamentally between agents with differing experiences.
+
+\paragraph{General Representations of Concepts.}
+When solving a problem, humans often assign an interpretation to the statements they consider, focusing only on the aspects they deem relevant. For instance, in a dice experiment, humans typically account for factors like the bias of the die, the number of faces, and the fairness of the roll, while filtering out other possibilities such as the die's color, size, or location. This filtering is driven by our intuitive understanding of what aspects are "interesting" for the problem at hand, which is inherently subjective. However, for an AGI agent encountering a dice experiment for the first time, it has no prior notion of what is "interesting" or relevant. The agent's perception of a die could relate it to an array of other concepts, such as its shape, color, size, shadows, or even its spatial context. To handle this generality, the agent must have a way to represent any concept or part of a concept without assuming predefined interpretations. In this framework, a concept does not exist independently but is instead defined by its relationships to other concepts, justifying the need for a representation based on the co-occurrence of concepts—both logically and temporally. Such a representation enables the agent to capture dependencies and interactions between concepts, allowing them to influence one another locally. This intuition aligns with ideas from information theory, where a new piece of information propagates through the system, influencing related concepts until its impact has been fully exploited across the model. This dynamic interaction ensures that the agent can adaptively learn and reason about novel scenarios without relying on fixed interpretations.
+
+
+\paragraph{Choosing Among Infinite Models.}
+The data collected by an agent can often be explained by an infinite number of potential models, as there are countless ways to interpret observations. However, to make reasoning feasible and actionable, an agent must reduce this vast space of possibilities. This reduction is often guided by the principle of Occam's Razor: preferring the simplest explanations that adequately explain the data. Another practical way to reduce the space of models is to focus on functionally relevant models—those that enable the agent to survive and achieve its goals in the environment. Functionally relevant models prioritize explanations that are not just parsimonious but also aligned with the agent's needs and capabilities, ensuring that the selected models are actionable and useful.
+
+\todo{use term bounded rationality somewhere}
+
+\paragraph{Sensorimotor Interactions.}
+A sensorimotor system allows an agent to actively engage with its environment to gather observations that refine or challenge its internal representation of the world. Without movement or interaction, the agent remains static and continues to collect the same evidences repeatedly, which provides little new information about the world. In contrast, by gaining control over its perspective and actions, the agent can explore its environment strategically to maximize the information gathered from its observations. This active exploration helps the agent confirm its subjective model or modify it when confronted with new evidences. By optimizing its movements to collect the most informative data, the agent can develop a more refined and functionally useful understanding of the world.
+
+
+\section{Current state of AGI}
+
+\subsection{Limitations of Bayesianism and Probability Theory in AGI}
+
+When applied to Artificial General Intelligence (AGI), Bayesianism and probability theory face two significant limitations:
+
+\paragraph{1. The Intractable Space of Probabilities.} 
+An AGI agent, by design, could theoretically ask any question about the universe. Consequently, probabilities must be assigned to every conceivable item in the space of all possible states of the world as well as every potential question. However, this space is impossibly large, as it encompasses every state of the world and every question one could ask in the universe. In practice, an AGI agent only has access to its experiences and observations, which makes it infeasible to define or compute such a space. This violates the AIKR (Assumption of Insufficient Knowledge and Resources) principle proposed by Pei Wang, which emphasizes that an AGI should operate under bounded knowledge and computational constraints. Furthermore, this limitation is one of the reasons why computing the marginal distribution in Bayes' rule is often intractable.
+
+\paragraph{2. Overdependence of Probabilities.} 
+In probability theory, the probability of a statement depends on every other statement in the space. If the space is infinite, as described above, this leads to nonsensical conclusions. For example, one could theoretically argue that the probability of seeing a boat in the sea is somehow influenced by the probability that unicorns exist, even though these concepts are very likely unrelated in a subjective experience. Such dependencies undermine the practical applicability of probability theory in AGI, where reasoning should be grounded in relevance and context.
+
+Pei Wang addresses the second limitation by arguing that in AGI, no interpretation should initially be assigned to statements. Instead, reasoning should rely on the relations between concepts as they are perceived through the sensory system, without pre-existing interpretation. The interpretation of concepts should emerge only from the patterns observed and inferred from sensory input, allowing for a more practical and scalable approach to reasoning in AGI.
+
+
+\section{Framework and Definitions'}
+
+\subsection{Terms}\label{sec:terms}
+
+Let $\mathcal{T}$ represent the set of all terms in the system. A \emph{term} is defined as a fundamental symbol that represents an object, concept, or entity within the knowledge base. Each term is atomic and indivisible in the context of this framework.
+
+The set of terms $\mathcal{T}$ is formally defined as:
+$$
+\mathcal{T} = \{ T_i \mid i \in I \},
+$$
+where:
+\begin{itemize}
+    \item $T_i$ denotes a unique term in the system.
+    \item $I$ is an infinite index set, typically countable (e.g. $I = \mathbb{N}$).
+\end{itemize}
+
+Since $\mathcal{T}$ is infinite, the framework assumes that the set of terms cannot be fully enumerated or stored explicitly. Instead, the set $\mathcal{T}$ is implicitly defined and terms are considered to exist as needed based on their references or usage within the framework.
+
+In this context:
+\begin{itemize}
+    \item $\mathcal{T}$ is \emph{countably infinite}, meaning there exists a one-to-one correspondence between the terms and the natural numbers $\mathbb{N}$.
+    \item Terms are introduced dynamically as required by observations, inferences, or interactions, rather than being predefined in their entirety.
+    \item The infinity of $\mathcal{T}$ reflects the unbounded nature of potential knowledge and ensures the scalability of the framework.
+\end{itemize}
+
+
+\subsection{Term Logic}\label{section:term_logic}
+
+\emph{Term logic} is a formal system of reasoning based on terms. In this framework, a term represents an object, concept, or entity, as defined in Section~\ref{sec:terms}. Statements in term logic are constructed by combining terms into propositions of the form:
+
+$$
+\text{Subject} \to \text{Predicate}.
+$$
+
+Here:
+\begin{itemize}
+    \item \textbf{Subject ($S$)}: A term that identifies the entity being described.
+    \item \textbf{Copula ($\to$)}: A formal symbol denoting the connection between the subject and predicate.
+    \item \textbf{Predicate ($P$)}: A term that provides a property, description, or category applied to the subject.
+\end{itemize}
+
+Formally, a statement in term logic can be written as:
+$$
+S \to P,
+$$
+where $S \in \mathcal{T}$ (subject) and $P \in \mathcal{T}$ (predicate).
+
+At this stage, the copula ($\to$) is treated as an abstract relation between $S$ and $P$ without any specific interpretation, allowing maximum generality.
+
+\subsection{Knowledge Base}
+
+A \emph{knowledge base} is a collection of statements, where each statement is expressed in the form of term logic as defined in \hyperref{section:term_logic}. Formally, a knowledge base $\mathcal{K}$ is defined as
+
+$$
+\mathcal{K} = \{ S_i \to P_i \mid S_i, P_i \in \mathcal{T}, \; i \in \mathbb{N} \},
+$$
+
+where:
+\begin{itemize}
+    \item $S_i$ is the subject term of the $i$-th statement.
+    \item $P_i$ is the predicate term of the $i$-th statement.
+    \item $\to$ denotes the copula, representing a relationship between $S_i$ and $P_i$.
+    \item $\mathbb{N}$ is the set of natural numbers, serving as the index set for the statements.\subsection{Knowledge Base}
+
+A \emph{knowledge base} is a collection of statements, where each statement is expressed in the form of term logic as defined in Section~\ref{section:term_logic}. Formally, a knowledge base $\mathcal{K}$ is defined as:
+
+$$
+\mathcal{K} = \{ S_i \to P_i \mid S_i, P_i \in \mathcal{T}, \; i \in I \},
+$$
+
+where:
+\begin{itemize}
+    \item $S_i$ is the subject term of the $i$-th statement.
+    \item $P_i$ is the predicate term of the $i$-th statement.
+    \item $\to$ denotes the copula, representing a relationship between $S_i$ and $P_i$.
+\end{itemize}
+
+
+Each element of $\mathcal{K}$ is a valid statement in term logic, and $\mathcal{K}$ represents the totality of knowledge currently available within the framework.
+
+\paragraph{Example:}
+Let $\mathcal{T} = \{\text{Electron}, \text{Particle}, \text{Charge}\}$. A possible knowledge base $\mathcal{K}$ might be:
+$$
+\mathcal{K} = \{\text{Electron} \to \text{Particle}, \; \text{Electron} \to \text{Charge} \}.
+$$
+
+\end{itemize}
+
+In this framework:
+\begin{itemize}
+    \item Each element of $\mathcal{K}$ is a statement $S_i \to P_i$.
+    \item The knowledge base $\mathcal{K}$ can be interpreted as an infinite sequence of statements indexed by $i \in \mathbb{N}$.
+\end{itemize}
+
+\paragraph{Example:}
+Let $\mathcal{T} = \{\text{Electron}, \text{Particle}, \text{Charge}\}$. A possible knowledge base $\mathcal{K}$ might be:
+$$
+\mathcal{K} = \{S_1 \to P_1, S_2 \to P_2, \dots\},
+$$
+where:
+\begin{align*}
+S_1 \to P_1 & = \text{Electron} \to \text{Particle}, \\
+S_2 \to P_2 & = \text{Electron} \to \text{Charge}.
+\end{align*}
+
+\subsection{Observational Plausibility}
+
+The \emph{observational plausibility} of a statement $S \to P$ given knowledge $\mathcal{K}$ is a real-valued measure that quantifies the degree to which the statement is supported by the knowledge base.
+$$
+\langle S \to P \mid \mathcal{K} \rangle \in \mathbb{R},
+$$
+where:
+\begin{itemize}
+    \item $S \to P$ is a statement in term logic, with $S, P \in \mathcal{T}$.
+    \item $\mathcal{K}$ is the knowledge base, defined as a set of statements $\{S_i \to P_i \mid i \in \mathbb{N}\}$.
+\end{itemize}
+
+\paragraph{Example:}
+Consider the knowledge base:
+$$
+\mathcal{K} = \{\text{Electron} \to \text{Particle}, \; \text{Electron} \to \text{Charge}\}.
+$$
+If we evaluate $\langle \text{Electron} \to \text{Particle} \mid \mathcal{K} \rangle$, the result might be a high plausibility value (e.g., $0.9$) based on the strong support for this statement in $\mathcal{K}$.
+
+\subsection{Deduction in Term Logic}
+
+Deduction is the process of computing the plausibility of a statement $\tstatement{S}{P}$ based on the plausibilities of related statements in the knowledge base $\mathcal{K}$. In this framework, the plausibility of $S \to P$ is inferred by combining the plausabilities of all statements that connect $S$ and $P$ with a common term.
+
+\paragraph{Example:}
+Consider the following plausabilities
+$$
+\left\{
+\begin{array}{l}
+    \plausability{Electron}{Particle}{K},
+    \plausability{Neutron}{Particle}{K},\\
+    \plausability{Particle}{Object}{K},
+    \plausability{Neutron}{Negative}{K}
+\end{array}
+\right\}
+$$
+the plausability $\plausability{Electron}{Object}{K}$ should only depend on
+$$
+\left\{
+\begin{array}{l}
+    \plausability{Electron}{Particle}{K},
+    \plausability{Particle}{Object}{K}
+\end{array}
+\right\}
+$$
+because they connect \term{Electron} and \term{Object} by the term \term{Particle}.
+
+\paragraph{Extension}
+The \textit{extension} of a term $T \in \mathcal{T}$ given knowledge base $\kb$, denoted as $\extension{T}{\kb}$, represents the terms connected as subjects to \term{T} in $\kb$. Formally:
+\[
+\extension{T}{\kb} := \{ x \mid x \in \mathcal{T}, \tstatement{x}{T} \in \kb \}.
+\]
+
+\paragraph{Intension}
+The \textit{intension} of a term $T \in \mathcal{T}$ given knowledge base $\kb$, denoted as $\intension{T}{\kb}$, represents the terms connected as predicates to \term{T} in $\kb$. Formally:
+\[
+\intension{T}{K} := \{ x \mid x \in \mathcal{T}, \tstatement{T}{x} \in \kb \}.
+\]
+
+\paragraph{Mediating Terms}
+The \textit{mediating terms} of two terms  \term{S} and \term{P} given a knowledge base $\kb$, denoted as $MedT(\tstatement{S}{P} \mid \kb)$, is the intersection of the intension of $S$ and the extension of $P$. Formally:
+\[
+MedT(S \to P \mid \mathcal{K}) := \intension{S}{\mathcal{K}} \cap \extension{P}{\mathcal{K}}.
+\]
+This set contains all terms that are both properties of $S$ and instances of $P$ in the knowledge base. The ingoing and outgoing connections of those terms are the only ones that influence the plausibility of $\tstatement{S}{P}$ given $\kb$.
+
+\paragraph{Mediating Plausabilities}
+The \textit{mediating plausabilities} of a statement $\tstatement{S}{P}$ given two terms $S$ and $P$ and a knowledge base $\kb$, denoted as ${Med}_{\mathcal{P}}(\tstatement{S}{P} \mid \kb)$, is union of the plausibilities of the statements that connect $S$ to $P$. Formally:
+\[
+\begin{split}
+{Med}_{\mathcal{P}}(S \to P \mid \kb) := \left\{ \plausability{S}{x}{\kb} \mid x \in MedT(\tstatement{S}{P} \mid \kb) \right\} \cup \\
+\left\{ \plausability{x}{P}{\kb} \mid x \in MedT(\tstatement{S}{P} \mid \kb) 
+\right\}
+\end{split}
+\]
+
+This set contains the plausibility of all statements connecting \term{S} and \term{P} together in $\kb$. We define this set in order to be able to define the deductive property.
+
+\paragraph{Formal definition of Deduction}
+\[
+    \plausability{S}{P}{K} = \text{f}({Med}_{\mathcal{P}}(\tstatement{S}{P} \mid \kb))
+\]
+
+% \paragraph{Recursive Plausibility Computation.}
+% The plausibility of $S \to P$ is computed recursively as a function of all plausibility pairs $\langle S \to x \mid \mathcal{K}\rangle$ and $\langle x \to P \mid \mathcal{K}\rangle$ for all $x \in \mathcal{T}$. Formally:
+% \[
+% \langle S \to P \mid \mathcal{K} \rangle = f\left( \{ \langle S \to x \mid \mathcal{K} \rangle, \langle x \to P \mid \mathcal{K} \rangle \mid x \in \mathcal{T}, \tstatement{S}{x} \in \mathcal{K}, \tstatement{x}{P} \in \mathcal{K} \} \right),
+% \]
+% where:
+% \begin{itemize}
+%     \item $f: (\mathbb{R}^2)^\mathbb{N} \to \mathbb{R}$ aggregates the plausibilities of all pairs $\plausability{S}{x}{K}$ and $\plausability{x}{P}{K}$ for the plausibility to be consistent by deduction. Every other node, is either non-informative or indirectly informative by transitivity.
+% \end{itemize}
+
+
+\section{Ideas to incorporate}
+
+\begin{itemize}
+    \item Only events with some evidence or relevance to the problem should be considered.
+    \item Bounded rationality | is the fact that the agent must be rationale as much as it as access to the information (AIKR is limiting factor, it cannot pretend to rely on all statements of the event space in probability theory).
+    \item internal representation of concepts can only plausibly be an aggregate of the gathered perceptions. And those cannot not plausibly be interpreted. Their interpretation can only rely on the relations concepts form between each other.
+\end{itemize}
+
+\end{document}

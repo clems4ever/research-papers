@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{xspace}
+\usepackage{needspace, etoolbox}
+\usepackage{url}
+
+\usepackage{mdframed}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{thm-restate}
+
+
+\title{Solving ARC-AGI with categories}
+\author{
+Clément Michaud \\
+Independent Researcher\\
+\texttt{clement.michaud34@gmail.com}
+}
+\date{May 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\begin{minipage}{0.9\textwidth}
+\small
+\textbf{Abstract.} TBW
+\end{minipage}
+\end{center}
+
+\vspace{10pt}
+
+
+\section{Introduction}
+
+\section{Objects and capabilities}
+
+Let's define the set of payloads $\mathcal{O}$ as being the set of any kind of raw data of any form.
+Let's define a set of capabilities $\Sigma$ as the set of processes transforming payloads into payloads. That is $\forall c \in \Sigma, c: \mathcal{O} \to \mathcal{O}$.
+A capability $C$ of a payload $o \in \mathcal{O}$ is a $c \in \Sigma$ that is applicable to $o$ and that produces $o'$ and a set of capabilities $C'$ bound to $o'$.
+
+\section{ARC Problem Formulation}
+
+An ARC problem consists of:
+\begin{itemize}
+    \item A set of $k$ example pairs $\{ (I_1, O_1), ..., (I_k, O_k) \}$ where $I_i$ and $O_i$ are objects with capabilities.
+    \item For each pair, there exists some morphism $f_i$ such that $f_i(I_i) = O_i$
+    \item The task is to find the set of morphisms $F$ such that $\forall f \in F, \forall 1 \leq i \leq k, f(I_i) = O_i$
+    \item Then, given a new $I_{k+1}$, we produce $f(I_{k+1})=O_{k+1}$.
+\end{itemize}
+
+
+\subsection{Example of task}
+\begin{itemize}
+    \item 1 -> 2,
+    \item 10 -> 20,
+    \item 3 -> 6
+    \item 8 -> ? (16),
+\end{itemize}
+
+\end{document}
